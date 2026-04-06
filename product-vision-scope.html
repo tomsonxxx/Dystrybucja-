@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Vision & Scope — AI Music Distribution Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07070c;
+  --surface: #0f0f18;
+  --surface-2: #161622;
+  --surface-3: #1e1e30;
+  --border: #2a2a3e;
+  --text: #e8e6e3;
+  --text-dim: #8a8896;
+  --text-muted: #5a5870;
+  --accent: #6366f1;
+  --accent-light: #a5b4fc;
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.07);
+  --green-border: rgba(34,197,94,0.18);
+  --red: #f87171;
+  --red-bg: rgba(248,113,113,0.07);
+  --red-border: rgba(248,113,113,0.18);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251,191,36,0.07);
+  --amber-border: rgba(251,191,36,0.18);
+  --cyan: #22d3ee;
+  --cyan-bg: rgba(34,211,238,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased}
+.container{max-width:920px;margin:0 auto;padding:2rem 1.5rem}
+
+.hero{text-align:center;padding:5rem 0 3rem;border-bottom:1px solid var(--border);margin-bottom:3rem;position:relative}
+.hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:4px;color:var(--accent-light);margin-bottom:1.5rem;opacity:.8}
+.hero h1{font-family:'DM Serif Display',serif;font-size:2.2rem;font-weight:400;line-height:1.25;margin-bottom:1rem;background:linear-gradient(135deg,#e8e6e3 20%,var(--accent-light) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text-dim);font-size:.9rem;max-width:640px;margin:0 auto;line-height:1.8}
+
+.section{margin-bottom:3.5rem}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent-light);background:rgba(99,102,241,0.1);padding:4px 10px;border-radius:20px;letter-spacing:1px}
+.section h2{font-family:'DM Serif Display',serif;font-size:1.45rem;font-weight:400}
+.section h3{font-size:1rem;font-weight:600;margin:1.8rem 0 .75rem;color:var(--accent-light)}
+p{margin-bottom:1rem;font-size:.88rem;color:var(--text-dim);line-height:1.8}
+
+/* ELEVATOR BOX */
+.elevator{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border:1px solid var(--border);border-radius:16px;padding:2rem 2rem;margin:1.5rem 0;position:relative;overflow:hidden}
+.elevator::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--cyan),var(--accent-light))}
+.elevator .pitch{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--text);line-height:1.6;margin-bottom:0}
+
+/* PERSONA */
+.persona-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin:1.5rem 0;display:grid;grid-template-columns:80px 1fr;gap:1.5rem;align-items:start}
+@media(max-width:640px){.persona-card{grid-template-columns:1fr}}
+.persona-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent) 0%,var(--cyan) 100%);display:flex;align-items:center;justify-content:center;font-size:2rem}
+.persona-info h4{font-size:1rem;margin-bottom:.25rem;color:var(--text)}
+.persona-info .persona-type{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent-light);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.75rem}
+.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem .75rem;margin-top:.5rem}
+@media(max-width:640px){.persona-grid{grid-template-columns:1fr}}
+.persona-attr{font-size:.8rem;color:var(--text-dim)}
+.persona-attr strong{color:var(--text);font-weight:500}
+
+/* SCOPE CARDS */
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+@media(max-width:640px){.scope-grid{grid-template-columns:1fr}}
+.scope-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;overflow:hidden}
+.scope-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.scope-card.in::before{background:var(--green)}
+.scope-card.out::before{background:var(--red)}
+.scope-card h4{font-size:.85rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.scope-card.in h4{color:var(--green)}
+.scope-card.out h4{color:var(--red)}
+.scope-card li{font-size:.82rem;color:var(--text-dim);margin-bottom:.4rem;margin-left:1.2rem;line-height:1.6}
+
+/* PLATFORM PRIORITY */
+.tier-section{margin:1.25rem 0}
+.tier-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:.75rem}
+.tier-1{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.tier-2{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.tier-3{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.platform-row{display:grid;grid-template-columns:2fr 1fr 2fr;gap:.75rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.8rem;margin-bottom:.5rem}
+.platform-row.header{background:var(--surface-2);font-weight:600;color:var(--text);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+@media(max-width:640px){.platform-row{grid-template-columns:1fr}}
+
+/* METRICS */
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.5rem 0}
+@media(max-width:640px){.metric-grid{grid-template-columns:1fr}}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center}
+.metric-value{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:.25rem}
+.metric-value.green{color:var(--green)}
+.metric-value.amber{color:var(--amber)}
+.metric-value.accent{color:var(--accent-light)}
+.metric-label{font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
+
+/* FLOW */
+.flow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1.5rem 0;justify-content:center}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-size:.78rem;color:var(--text);text-align:center;min-width:120px}
+.flow-step .step-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent-light);display:block;margin-bottom:.25rem}
+.flow-arrow{color:var(--text-muted);font-size:1.2rem}
+@media(max-width:640px){.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+
+/* GENRE TAGS */
+.genre-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+.genre-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(99,102,241,0.08);color:var(--accent-light);border:1px solid rgba(99,102,241,0.15)}
+
+.callout{background:rgba(99,102,241,0.05);border-left:3px solid var(--accent);padding:1rem 1.25rem;border-radius:0 10px 10px 0;margin:1.5rem 0;font-size:.84rem;color:var(--text-dim)}
+.callout strong{color:var(--text)}
+.callout-green{border-left-color:var(--green);background:var(--green-bg)}
+
+/* MOD CARD */
+.mod-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.mod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mod-card.c-green::before{background:var(--green)}
+.mod-card.c-accent::before{background:var(--accent)}
+.mod-card.c-amber::before{background:var(--amber)}
+.mod-card.c-cyan::before{background:var(--cyan)}
+
+.badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;font-weight:500;white-space:nowrap}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+.footer{text-align:center;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem;color:var(--text-muted);font-size:.7rem}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <div class="hero-label">Product Vision & Scope v1.0</div>
+  <h1>Konstytucja Projektu</h1>
+  <p>Dokument definiujący CO budujemy, DLA KOGO, i czym to NIE jest. Każda przyszła decyzja techniczna i biznesowa musi być spójna z tym dokumentem.</p>
+</div>
+
+<!-- ═══════ 01 — ELEVATOR PITCH ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2>Elevator Pitch</h2>
+  </div>
+
+  <div class="elevator">
+    <p class="pitch">
+      <strong>SoundPush</strong> to open-source'owe narzędzie AI dla niezależnych producentów muzyki elektronicznej, które po wrzuceniu pliku audio automatycznie analizuje utwór, generuje zoptymalizowane metadane (tytuły, opisy SEO, tagi, okładki) i publikuje go na YouTube, SoundCloud i Internet Archive z jednego dashboardu — oszczędzając artystom godzin powtarzalnej pracy przy każdym wydaniu.
+    </p>
+  </div>
+
+  <div class="callout">
+    <strong>Nazwa robocza: SoundPush</strong> — krótka, zapada w pamięć, oddaje istotę produktu ("wypchnij dźwięk na świat"). Nazwa może ulec zmianie — traktujemy ją jako placeholder.
+  </div>
+</div>
+
+<!-- ═══════ 02 — PERSONA ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2>Persona użytkownika</h2>
+  </div>
+
+  <p>Produkt jest budowany przede wszystkim dla jednego konkretnego użytkownika — Ciebie. Ale udostępnimy go za darmo, więc definiujemy szerszą personę, żeby narzędzie było użyteczne dla podobnych artystów.</p>
+
+  <div class="persona-card">
+    <div class="persona-avatar">🎛️</div>
+    <div class="persona-info">
+      <h4>Niezależny producent electronic / EDM</h4>
+      <div class="persona-type">Primary Persona</div>
+      <div class="persona-grid">
+        <div class="persona-attr"><strong>Gatunek:</strong> Electronic, EDM, Techno, House, Ambient, Synth</div>
+        <div class="persona-attr"><strong>Wiek:</strong> 18-40 lat</div>
+        <div class="persona-attr"><strong>Budżet:</strong> Minimalny (preferuje darmowe narzędzia)</div>
+        <div class="persona-attr"><strong>Umiejętności tech:</strong> Podstawowe-średnie</div>
+        <div class="persona-attr"><strong>Platformy:</strong> YouTube ✓, SoundCloud ✓</div>
+        <div class="persona-attr"><strong>Output:</strong> Single/EP co kilka tygodni</div>
+        <div class="persona-attr"><strong>Ból:</strong> Marnuje godziny na ręczny upload, opisy, tagi, grafikę</div>
+        <div class="persona-attr"><strong>Cel:</strong> Maksymalna widoczność + potencjalny dochód</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Podgatunki i tagi specyficzne dla electronic/EDM</h3>
+  <p>Producenci elektroniczni potrzebują bardzo precyzyjnego tagowania — algorytmy platform lepiej indeksują utwory z niszowymi, trafnymi tagami niż z ogólnymi. AI musi znać te podgatunki:</p>
+
+  <div class="genre-tags">
+    <span class="genre-tag">techno</span>
+    <span class="genre-tag">house</span>
+    <span class="genre-tag">deep house</span>
+    <span class="genre-tag">tech house</span>
+    <span class="genre-tag">progressive house</span>
+    <span class="genre-tag">trance</span>
+    <span class="genre-tag">psytrance</span>
+    <span class="genre-tag">drum and bass</span>
+    <span class="genre-tag">dubstep</span>
+    <span class="genre-tag">ambient</span>
+    <span class="genre-tag">downtempo</span>
+    <span class="genre-tag">synthwave</span>
+    <span class="genre-tag">electro</span>
+    <span class="genre-tag">breakbeat</span>
+    <span class="genre-tag">IDM</span>
+    <span class="genre-tag">minimal</span>
+    <span class="genre-tag">hardstyle</span>
+    <span class="genre-tag">future bass</span>
+    <span class="genre-tag">lo-fi</span>
+    <span class="genre-tag">chillout</span>
+    <span class="genre-tag">acid</span>
+    <span class="genre-tag">industrial</span>
+    <span class="genre-tag">garage</span>
+    <span class="genre-tag">melodic techno</span>
+  </div>
+</div>
+
+<!-- ═══════ 03 — PROBLEM STATEMENT ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2>Problem Statement</h2>
+  </div>
+
+  <div class="mod-card c-amber">
+    <p style="color:var(--text);font-size:.92rem;margin-bottom:.75rem"><strong>Problem, który rozwiązujemy:</strong></p>
+    <p>Niezależny producent muzyki elektronicznej tworzy utwór, a potem musi poświęcić <strong>1-3 godziny na każdy release</strong> na ręczne czynności: wymyślenie optymalnego tytułu, napisanie opisu SEO pod każdą platformę osobno, dobranie tagów i hashtagów, przygotowanie okładki w odpowiednich wymiarach, upload na kilka platform z osobnym logowaniem, napisanie postów promocyjnych na social media.</p>
+    <p style="margin-bottom:0">Ten czas mógłby spędzić na tworzeniu kolejnej muzyki. <strong>Żadne istniejące darmowe narzędzie nie automatyzuje tego flow end-to-end.</strong></p>
+  </div>
+
+  <h3>Dlaczego obecne rozwiązania nie wystarczają?</h3>
+
+  <div class="scope-grid">
+    <div class="scope-card out">
+      <h4>✗ DistroKid / TuneCore</h4>
+      <ul>
+        <li>Płatne ($23-30/rok)</li>
+        <li>Tylko platformy streamingowe</li>
+        <li>Brak AI do metadanych</li>
+        <li>Brak content kitów promocyjnych</li>
+        <li>Nie uploaduje na YouTube/SoundCloud</li>
+      </ul>
+    </div>
+    <div class="scope-card out">
+      <h4>✗ SymphonyOS / Fanify</h4>
+      <ul>
+        <li>Tylko promocja, nie dystrybucja</li>
+        <li>Nie uploaduje muzyki</li>
+        <li>Płatne kampanie reklamowe</li>
+        <li>Nie generuje metadanych</li>
+      </ul>
+    </div>
+    <div class="scope-card out">
+      <h4>✗ Ręczny upload</h4>
+      <ul>
+        <li>1-3 godziny na release</li>
+        <li>Powtarzalna, żmudna praca</li>
+        <li>Niespójne opisy między platformami</li>
+        <li>Brak optymalizacji SEO</li>
+      </ul>
+    </div>
+    <div class="scope-card out">
+      <h4>✗ Loudly</h4>
+      <ul>
+        <li>Skupiony na muzyce generowanej AI</li>
+        <li>Nie dla artystów tworzących własną muzykę</li>
+        <li>Płatna subskrypcja</li>
+        <li>Zamknięty ekosystem</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 04 — USER FLOW ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2>Główny flow użytkownika</h2>
+  </div>
+
+  <p>Tak wygląda docelowe doświadczenie artysty — od pliku audio do pełnej publikacji:</p>
+
+  <div class="flow">
+    <div class="flow-step"><span class="step-num">01</span>Wrzuć plik<br>.mp3 / .wav / .flac</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">02</span>AI analizuje<br>BPM, tonacja, gatunek</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">03</span>AI generuje<br>tytuł, opisy, tagi, okładkę</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">04</span>Artysta przegląda<br>edytuje, zatwierdza</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">05</span>Jedno kliknięcie<br>upload na 3 platformy</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">06</span>Content kit<br>klipy, grafiki, posty</div>
+  </div>
+
+  <div class="callout-green callout">
+    <strong>Zasada złotego kliku:</strong> Artysta nigdy nie klika "opublikuj" bez podglądu. AI przygotowuje wszystko, ale finalną decyzję podejmuje człowiek. To chroni konto artysty i daje mu kontrolę.
+  </div>
+</div>
+
+<!-- ═══════ 05 — ZAKRES MVP ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2>Zakres MVP — co wchodzi, a co nie</h2>
+  </div>
+
+  <div class="scope-grid">
+    <div class="scope-card in">
+      <h4>✓ W zakresie MVP</h4>
+      <ul>
+        <li>Analiza audio: BPM, tonacja, gatunek, nastrój (librosa)</li>
+        <li>Generowanie metadanych AI: tytuły, opisy SEO, tagi per platforma</li>
+        <li>Generowanie okładki AI (DALL-E 3 / Stable Diffusion)</li>
+        <li>Auto-upload na YouTube (unlisted + instrukcja public)</li>
+        <li>Auto-upload na SoundCloud (publiczny)</li>
+        <li>Auto-upload na Internet Archive</li>
+        <li>Konwersja audio → wideo (MP3 + okładka → MP4 dla YouTube)</li>
+        <li>Prosty web dashboard (upload, podgląd, publikacja)</li>
+        <li>Content kit: grafiki, posty social media, kalendarz 7-dniowy</li>
+        <li>Smart link (jeden URL ze wszystkimi platformami)</li>
+        <li>CLI do szybkiego użycia z terminala</li>
+        <li>Open-source (licencja MIT / GPL)</li>
+      </ul>
+    </div>
+    <div class="scope-card out">
+      <h4>✗ Poza zakresem MVP</h4>
+      <ul>
+        <li>Generowanie muzyki (to nie Suno/Udio)</li>
+        <li>Zarządzanie prawami autorskimi / royalties</li>
+        <li>Upload na Spotify / Apple Music (wymaga dystrybutora)</li>
+        <li>Browser automation / łamanie ToS platform</li>
+        <li>Automatyczna publikacja na social media (zbyt ryzykowne)</li>
+        <li>Bandcamp upload (brak API dla indywidualnych artystów)</li>
+        <li>System kont użytkowników / multi-user (w MVP: 1 artysta)</li>
+        <li>Monetyzacja / płatności (to darmowe narzędzie)</li>
+        <li>Aplikacja mobilna</li>
+        <li>Mastering / post-processing audio</li>
+        <li>Zarządzanie kontami artystów na platformach</li>
+        <li>Analityka post-release (faza późniejsza)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 06 — PLATFORMY PRIORYTET ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2>Priorytet platform — electronic/EDM</h2>
+  </div>
+
+  <p>Dla muzyki elektronicznej pewne platformy mają zdecydowanie większe znaczenie niż dla innych gatunków. Poniżej ranking z uzasadnieniem:</p>
+
+  <div class="tier-section">
+    <span class="tier-label tier-1">Tier 1 — budujemy w MVP</span>
+    <div class="platform-row header">
+      <span>Platforma</span><span>Metoda</span><span>Dlaczego kluczowa dla EDM</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>SoundCloud</strong></span>
+      <span class="badge badge-green">API</span>
+      <span style="color:var(--text-dim)">Główna platforma odkrywania muzyki elektronicznej. Ogromna społeczność producentów. Reposty = viralność. Masz konto ✓</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>YouTube</strong></span>
+      <span class="badge badge-green">API</span>
+      <span style="color:var(--text-dim)">Drugi najważniejszy kanał. Wizualizacje audio + teledyski. SEO daje długi ogon odkrywalności. Masz konto ✓</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>Internet Archive</strong></span>
+      <span class="badge badge-green">API</span>
+      <span style="color:var(--text-dim)">Darmowe, trwałe archiwum. Brak limitu storage. Dobry do backup katalogu + SEO (indeksowane przez Google)</span>
+    </div>
+  </div>
+
+  <div class="tier-section">
+    <span class="tier-label tier-2">Tier 2 — content kit (materiały do ręcznego wrzucenia)</span>
+    <div class="platform-row">
+      <span><strong>Bandcamp</strong></span>
+      <span class="badge badge-amber">Pakiet</span>
+      <span style="color:var(--text-dim)">Ważna dla sprzedaży bezpośredniej. Fani EDM kupują na Bandcamp. AI przygotuje pakiet ready-to-upload</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>TikTok / Instagram</strong></span>
+      <span class="badge badge-amber">Pakiet</span>
+      <span style="color:var(--text-dim)">Klipy 15-60s z najlepszym fragmentem. Hashtagi #edm #techno. AI generuje, artysta wrzuca ręcznie</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>Reddit</strong></span>
+      <span class="badge badge-amber">Pakiet</span>
+      <span style="color:var(--text-dim)">r/electronicmusic, r/techno, r/edmproduction — gotowe posty z linkami. Ręczna publikacja</span>
+    </div>
+  </div>
+
+  <div class="tier-section">
+    <span class="tier-label tier-3">Tier 3 — przyszłość (wymaga dystrybutora)</span>
+    <div class="platform-row">
+      <span><strong>Spotify</strong></span>
+      <span class="badge badge-red">Dystrybutor</span>
+      <span style="color:var(--text-dim)">Kluczowa dla monetyzacji, ale wymaga DistroKid. AI przygotuje metadane w formacie dystrybutora</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>Apple Music / Tidal / Deezer</strong></span>
+      <span class="badge badge-red">Dystrybutor</span>
+      <span style="color:var(--text-dim)">Dodatkowe kanały streamingowe. Jedno konto DistroKid ($23/rok) pokrywa wszystkie</span>
+    </div>
+    <div class="platform-row">
+      <span><strong>Beatport</strong></span>
+      <span class="badge badge-red">Dystrybutor</span>
+      <span style="color:var(--text-dim)">Specjalistyczny sklep DJ-ski. Kluczowy dla techno/house. Wymaga dystrybutora lub labelu</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 07 — SUCCESS METRICS ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2>Metryki sukcesu</h2>
+  </div>
+
+  <p>Jak mierzymy, czy narzędzie działa? Dwie perspektywy: osobiste użycie (Twoje) i community (jeśli udostępnisz).</p>
+
+  <h3>Metryki osobiste (MVP)</h3>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value green">5 min</div>
+      <div class="metric-label">Czas release (zamiast 1-3h)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value accent">3</div>
+      <div class="metric-label">Platformy z jednego kliknięcia</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value amber">10+</div>
+      <div class="metric-label">Releases w pierwszym miesiącu</div>
+    </div>
+  </div>
+
+  <h3>Metryki community (po udostępnieniu)</h3>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value green">50</div>
+      <div class="metric-label">GitHub stars w 3 miesiące</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value accent">10</div>
+      <div class="metric-label">Artystów aktywnie używających</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value amber">100</div>
+      <div class="metric-label">Uploadów przez narzędzie</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 08 — MODEL DYSTRYBUCJI ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2>Model dystrybucji projektu</h2>
+  </div>
+
+  <div class="mod-card c-green">
+    <p style="color:var(--text);font-size:.92rem;margin-bottom:.5rem"><strong>Open-source + self-hosted</strong></p>
+    <p>Projekt będzie dostępny na GitHub (<code>github.com/tomsonxxx/Dystrybucja-</code>) pod licencją open-source. Użytkownicy klonują repo, konfigurują własne klucze API i uruchamiają lokalnie lub na tanim hostingu.</p>
+    <p style="margin-bottom:0"><strong>Koszt dla użytkownika:</strong> $0 (narzędzie) + ~$3-10/mies. (API LLM, zależnie od użycia) + opcjonalnie $23/rok (DistroKid, jeśli chce Spotify).</p>
+  </div>
+
+  <h3>Struktura repozytorium</h3>
+  <div class="callout">
+    <code style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent-light)">
+      Dystrybucja-/<br>
+      ├── docs/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # dokumentacja (HTML + MD)<br>
+      ├── src/<br>
+      │ &nbsp; ├── core/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # logika biznesowa<br>
+      │ &nbsp; ├── ai/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # moduły AI (prompty, LLM)<br>
+      │ &nbsp; ├── audio/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # analiza audio (librosa)<br>
+      │ &nbsp; ├── uploaders/ &nbsp;&nbsp;&nbsp; # YouTube, SoundCloud, IA<br>
+      │ &nbsp; ├── generators/ &nbsp;&nbsp; # okładki, klipy, posty<br>
+      │ &nbsp; ├── api/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # FastAPI endpointy<br>
+      │ &nbsp; └── frontend/ &nbsp;&nbsp;&nbsp;&nbsp; # React dashboard<br>
+      ├── tests/<br>
+      ├── config/<br>
+      ├── menory.md<br>
+      ├── ToDo.md<br>
+      ├── README.md<br>
+      ├── requirements.txt<br>
+      └── .env.example
+    </code>
+  </div>
+</div>
+
+<!-- ═══════ 09 — OGRANICZENIA ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2>Znane ograniczenia i ryzyka</h2>
+  </div>
+
+  <div class="scope-grid">
+    <div class="scope-card out" style="grid-column:1/-1">
+      <h4 style="color:var(--amber)">⚠ Ograniczenia, z którymi żyjemy</h4>
+      <ul>
+        <li><strong>YouTube:</strong> Bez audytu Google uploady są tylko unlisted. Artysta musi ręcznie zmienić na public (1 klik)</li>
+        <li><strong>Spotify/Apple:</strong> Nigdy nie będą dostępne przez API. Zawsze potrzebny dystrybutor ($23/rok)</li>
+        <li><strong>Bandcamp:</strong> Brak API dla indywidualnych artystów. AI przygotuje pakiet, artysta uploaduje ręcznie (~2 min)</li>
+        <li><strong>Social media:</strong> Automatyczna publikacja jest ryzykowna. Generujemy materiały, artysta wrzuca sam</li>
+        <li><strong>Rate-limiting:</strong> YouTube max 6 wideo/dzień. Internet Archive blokuje przy za dużym ruchu</li>
+        <li><strong>Koszty API LLM:</strong> Każde generowanie metadanych kosztuje ~$0.01-0.05. Przy 100 releases/mies. = ~$1-5</li>
+        <li><strong>Jakość AI:</strong> Opisy i tagi wymagają ludzkiego review. AI nie rozumie kontekstu sceny muzycznej na 100%</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 10 — PODSUMOWANIE ═══════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2>Podsumowanie — co budujemy</h2>
+  </div>
+
+  <div class="elevator">
+    <p class="pitch" style="font-size:1rem">
+      Budujemy <strong>darmowe, open-source'owe narzędzie</strong> AI, które zamienia proces wydawania muzyki elektronicznej z wielogodzinnej żmudnej pracy w <strong>5-minutowy, semi-automatyczny flow</strong>. AI robi 90% roboty (analiza, metadane, grafiki, opisy). Artysta robi 10% (przegląd, korekta, kliknięcie "publikuj"). Zaczynamy od 3 platform z API, rozszerzamy o content kity i pakiety dla platform bez API.
+    </p>
+  </div>
+
+  <div class="callout-green callout">
+    <strong>Następny dokument:</strong> Architektura techniczna — diagramy systemu, przepływ danych, schemat bazy danych, mapa API. Gotowy do Sesji 3?
+  </div>
+</div>
+
+<div class="footer">
+  Product Vision & Scope v1.0 · wygenerowany 6 kwietnia 2026 · Projekt: AI Music Distribution Agent · Repo: github.com/tomsonxxx/Dystrybucja-
+</div>
+
+</div>
+</body>
+</html>

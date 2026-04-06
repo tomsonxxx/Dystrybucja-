@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kompletna Instrukcja Projektu — AI Music Distribution Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06060b;
+  --surface: #0d0d16;
+  --surface-2: #14141f;
+  --surface-3: #1b1b2a;
+  --border: #262640;
+  --border-light: #33335a;
+  --text: #eae8e4;
+  --text-dim: #9492a6;
+  --text-muted: #5e5c72;
+  --accent: #7c5cfc;
+  --accent-light: #a78bfa;
+  --accent-glow: rgba(124,92,252,0.15);
+  --green: #34d399;
+  --green-bg: rgba(52,211,153,0.07);
+  --green-border: rgba(52,211,153,0.2);
+  --red: #fb7185;
+  --red-bg: rgba(251,113,133,0.07);
+  --red-border: rgba(251,113,133,0.2);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251,191,36,0.07);
+  --amber-border: rgba(251,191,36,0.2);
+  --cyan: #22d3ee;
+  --cyan-bg: rgba(34,211,238,0.07);
+  --cyan-border: rgba(34,211,238,0.2);
+  --skull: #ef4444;
+  --skull-bg: rgba(239,68,68,0.05);
+  --skull-border: rgba(239,68,68,0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+}
+.container { max-width: 940px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 5rem 0 3.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 3rem;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: var(--accent-light);
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(135deg, #eae8e4 15%, var(--accent-light) 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  max-width: 660px;
+  margin: 0 auto;
+  line-height: 1.9;
+}
+.hero-meta {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.hero-meta span {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 3.5rem; }
+.section-head {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.sn {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.62rem;
+  color: var(--accent-light);
+  background: var(--accent-glow);
+  padding: 4px 11px;
+  border-radius: 20px;
+  letter-spacing: 1.5px;
+}
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.section h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+  color: var(--accent-light);
+}
+.section h4 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin: 1.2rem 0 0.5rem;
+}
+p, .desc { margin-bottom: 1rem; font-size: 0.88rem; color: var(--text-dim); }
+p strong, .desc strong { color: var(--text); }
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  margin: 2.5rem 0;
+}
+.toc h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 1.2rem;
+  color: var(--text);
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+  columns: 2;
+  column-gap: 2rem;
+}
+@media(max-width:700px) { .toc ol { columns: 1; } }
+.toc li {
+  counter-increment: toc;
+  margin-bottom: 0.6rem;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  break-inside: avoid;
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero) ".";
+  font-family: 'Fira Code', monospace;
+  font-size: 0.65rem;
+  color: var(--accent-light);
+  margin-right: 0.5rem;
+}
+.toc li a {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.toc li a:hover { color: var(--accent-light); }
+
+/* ── CARDS ── */
+.card {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.card.g::before { background: var(--green); }
+.card.a::before { background: var(--accent); }
+.card.w::before { background: var(--amber); }
+.card.c::before { background: var(--cyan); }
+.card.r::before { background: var(--red); }
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+.card-sub {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.75rem;
+}
+.card p { font-size: 0.84rem; margin-bottom: 0.5rem; }
+.card ul { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.card li {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0 0 0.4rem 1.2rem;
+  line-height: 1.6;
+}
+.card li strong { color: var(--text); }
+
+/* ── PLATFORM GRID ── */
+.pgrid { display: grid; gap: 0.6rem; margin: 1rem 0; }
+.pcard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem;
+  align-items: start;
+}
+.pname { font-weight: 600; font-size: 0.88rem; }
+.pdetail { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; line-height: 1.6; }
+.badge {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.58rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.bg { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.br { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.bw { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.bc { background: var(--cyan-bg); color: var(--cyan); border: 1px solid var(--cyan-border); }
+
+/* ── PROBLEM/SOLUTION ── */
+.prob {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+.prob-head {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.sol {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.sol:last-child { border-bottom: none; }
+.sol-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.sa { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.sb { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.sc { background: var(--cyan-bg); color: var(--cyan); border: 1px solid var(--cyan-border); }
+.sx { background: var(--skull-bg); color: var(--skull); border: 1px solid var(--skull-border); }
+.sol p { font-size: 0.82rem; margin-bottom: 0.4rem; }
+.sol ul { margin: 0.5rem 0 0 1.2rem; }
+.sol li { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.3rem; line-height: 1.6; }
+
+/* ── TIMELINE ── */
+.tl { margin: 1.5rem 0; }
+.tl-i {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+  position: relative;
+}
+.tl-i::before {
+  content: '';
+  position: absolute;
+  left: 50px; top: 28px; bottom: -16px;
+  width: 1px;
+  background: var(--border);
+}
+.tl-i:last-child::before { display: none; }
+.tl-ph {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.58rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  color: var(--accent-light);
+  min-width: 100px;
+  text-align: center;
+  margin-top: 2px;
+}
+.tl-c { flex: 1; }
+.tl-c strong { color: var(--text); font-size: 0.9rem; }
+.tl-c p { font-size: 0.82rem; color: var(--text-dim); margin: 0.3rem 0 0; }
+.tl-t { font-family: 'Fira Code', monospace; font-size: 0.68rem; color: var(--amber); margin-top: 0.3rem; }
+.tl-c ul { margin: 0.4rem 0 0 1rem; }
+.tl-c li { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+
+/* ── TABLE ── */
+.tbl { display: grid; gap: 0.5rem; margin: 1rem 0; }
+.trow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.8rem;
+}
+.trow.th {
+  background: var(--surface-2);
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+@media(max-width:640px) { .trow { grid-template-columns: 1fr; } }
+
+/* ── SCORE ── */
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+.score-lbl { font-size: 0.82rem; color: var(--text-dim); width: 200px; flex-shrink: 0; }
+.score-bar { flex: 1; height: 7px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 4px; }
+.score-val { font-family: 'Fira Code', monospace; font-size: 0.72rem; width: 35px; text-align: right; }
+
+/* ── CALLOUT ── */
+.co {
+  background: rgba(124,92,252,0.05);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 0 10px 10px 0;
+  margin: 1.5rem 0;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+}
+.co strong { color: var(--text); }
+.co-warn { border-left-color: var(--amber); background: var(--amber-bg); }
+.co-danger { border-left-color: var(--red); background: var(--skull-bg); }
+.co-green { border-left-color: var(--green); background: var(--green-bg); }
+
+/* ── PRO/CON ── */
+.pc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+@media(max-width:640px) { .pc { grid-template-columns: 1fr; } }
+.pc-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+.pc-col h4 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+}
+.pc-col.pro h4 { color: var(--green); }
+.pc-col.con h4 { color: var(--red); }
+.pc-col li {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0 0 0.5rem 1rem;
+  line-height: 1.5;
+}
+
+/* ── LEGEND ── */
+.legend {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+.legend h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+.leg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 1rem;
+}
+@media(max-width:640px) { .leg-grid { grid-template-columns: 1fr; } }
+.leg-item {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  padding: 0.15rem 0;
+}
+.leg-item strong {
+  color: var(--accent-light);
+  font-weight: 500;
+  font-size: 0.78rem;
+  font-family: 'Fira Code', monospace;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+/* ── SEPARATOR ── */
+.sep {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <div class="hero-tag">Kompletna Instrukcja Projektu · v1.0</div>
+  <h1>AI Agent Autonomicznej Dystrybucji i Promocji Muzyki</h1>
+  <p class="hero-sub">Dokument scalający analizę wykonalności, plan dokumentacji, architekturę, strategie obejść, harmonogram i model biznesowy. Jeden plik = pełny obraz projektu od wizji do wdrożenia.</p>
+  <div class="hero-meta">
+    <span>Repo: github.com/tomsonxxx/Dystrybucja-</span>
+    <span>Data: 6 kwietnia 2026</span>
+    <span>Status: Faza dokumentacji</span>
+  </div>
+</div>
+
+<!-- ═══════ TOC ═══════ -->
+<div class="toc">
+  <h3>Spis treści</h3>
+  <ol>
+    <li><a href="#s1">Werdykt — czy projekt jest wykonalny?</a></li>
+    <li><a href="#s2">Mapa platform i dostępność API</a></li>
+    <li><a href="#s3">Konkurencja na rynku</a></li>
+    <li><a href="#s4">Główne przeszkody i ryzyka</a></li>
+    <li><a href="#s5">Za i Przeciw — bilans projektu</a></li>
+    <li><a href="#s6">Ocena wykonalności w wymiarach</a></li>
+    <li><a href="#s7">Architektura techniczna i stos</a></li>
+    <li><a href="#s8">AI Pipeline — serce systemu</a></li>
+    <li><a href="#s9">Strategie obejścia ograniczeń (#1–#8)</a></li>
+    <li><a href="#s10">Harmonogram i roadmap MVP</a></li>
+    <li><a href="#s11">Model biznesowy i monetyzacja</a></li>
+    <li><a href="#s12">Mapa dokumentów — co jeszcze tworzymy</a></li>
+    <li><a href="#s13">Zasady współpracy AI–Użytkownik</a></li>
+    <li><a href="#s14">Legenda terminów</a></li>
+  </ol>
+</div>
+
+<!-- ═══════ 01 — WERDYKT ═══════ -->
+<div class="section" id="s1">
+  <div class="section-head"><span class="sn">01</span><h2>Werdykt — czy projekt jest wykonalny?</h2></div>
+
+  <div class="card a">
+    <div class="card-title">⚖️ Końcowy werdykt</div>
+    <p>Pomysł jest <strong>częściowo wykonalny</strong>, ale nie jako pełna autonomia. Realistyczny scenariusz to <strong>narzędzie semi-autonomiczne</strong> — AI przygotowuje wszystko (opisy, tagi, grafiki, posty), a upload odbywa się przez oficjalne API tam gdzie możliwe (YouTube, SoundCloud, Internet Archive), lub przez istniejące dystrybutory (DistroKid ~$25/rok) na platformy streamingowe.</p>
+    <p><strong>Pełna automatyzacja na wszystkich portalach jednocześnie jest nierealna</strong> ze względu na brak API uploadu na większości platform i ryzyko bana za browser automation.</p>
+    <p>Zasada przewodnia: <strong>automatyzuj przygotowanie, nie publikację</strong>. AI świetnie przygotowuje, analizuje i optymalizuje treści. Finalna publikacja powinna być "one-click" z dashboardu — nie w pełni autonomiczna.</p>
+  </div>
+</div>
+
+<!-- ═══════ 02 — MAPA PLATFORM ═══════ -->
+<div class="section" id="s2">
+  <div class="section-head"><span class="sn">02</span><h2>Mapa platform i dostępność API</h2></div>
+
+  <h3>Platformy z oficjalnym API do uploadu</h3>
+  <div class="pgrid">
+    <div class="pcard">
+      <div>
+        <div class="pname">YouTube (Data API v3)</div>
+        <div class="pdetail">Upload przez videos.insert. Limit: 6 wideo/dzień (10k jednostek quota, upload = 1600 jedn.). Projekty niezweryfikowane od VII 2020 — filmy tylko prywatne. Wymaga audytu Google.</div>
+      </div>
+      <span class="badge bg">API ✓</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">SoundCloud</div>
+        <div class="pdetail">Pełne API: /tracks endpoint (POST multipart, do 500MB). OAuth 2.1. Obsługa tagów, metadanych, playlist. Stabilne, dobrze udokumentowane.</div>
+      </div>
+      <span class="badge bg">API ✓</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">Internet Archive</div>
+        <div class="pdetail">Biblioteka Python "internetarchive" + CLI "ia". Kolekcje opensource_audio/movies. Agresywny rate-limiting — przekroczenie = blokada konta.</div>
+      </div>
+      <span class="badge bg">API ✓</span>
+    </div>
+  </div>
+
+  <h3>Platformy z ograniczonym / brakującym API</h3>
+  <div class="pgrid">
+    <div class="pcard">
+      <div>
+        <div class="pname">Bandcamp</div>
+        <div class="pdetail">API wyłącznie dla labeli i fulfillment partnerów. Indywidualny artysta nie dostanie dostępu.</div>
+      </div>
+      <span class="badge bw">Ograniczone</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">Spotify / Apple Music / Tidal / Deezer</div>
+        <div class="pdetail">Brak bezpośredniego API uploadu. Wymagany pośrednik — dystrybutor (DistroKid, TuneCore, CD Baby).</div>
+      </div>
+      <span class="badge br">Tylko dystrybut.</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">TikTok / Instagram / Facebook</div>
+        <div class="pdetail">API dostępne przez Meta Business Suite / TikTok Content Posting API. Weryfikacja biznesowa, ograniczenia, ryzyko bana.</div>
+      </div>
+      <span class="badge bw">Ryzykowne</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">Audiomack / BandLab</div>
+        <div class="pdetail">Brak publicznego API do uploadu. Tylko ręczny upload przez webapp.</div>
+      </div>
+      <span class="badge br">Brak API</span>
+    </div>
+  </div>
+
+  <div class="co">
+    <strong>Wniosek:</strong> Tylko 3 z ~12 głównych platform muzycznych mają API do uploadu. Reszta wymaga pośrednika lub ręcznego uploadu. To fundamentalne ograniczenie zakresu autonomii agenta.
+  </div>
+</div>
+
+<!-- ═══════ 03 — KONKURENCJA ═══════ -->
+<div class="section" id="s3">
+  <div class="section-head"><span class="sn">03</span><h2>Konkurencja na rynku</h2></div>
+
+  <div class="pgrid">
+    <div class="pcard">
+      <div>
+        <div class="pname">SymphonyOS</div>
+        <div class="pdetail">Marketing AI, 100k+ artystów. Kampanie reklamowe Instagram/YouTube. AI "Maestro". Nie uploaduje muzyki. $0-$20/mies.</div>
+      </div>
+      <span class="badge bc">Promocja</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">Fanify</div>
+        <div class="pdetail">AI micro-targeting, SmartLink. Nie uploaduje muzyki. Od $1/dzień na reklamy.</div>
+      </div>
+      <span class="badge bc">Promocja</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">Loudly</div>
+        <div class="pdetail">AI kreacja + dystrybucja na Spotify/Apple/TikTok. Najbliższy naszemu pomysłowi, ale skupia się na muzyce generowanej AI.</div>
+      </div>
+      <span class="badge bw">Kreacja+Dystr.</span>
+    </div>
+    <div class="pcard">
+      <div>
+        <div class="pname">DistroKid / TuneCore / CD Baby</div>
+        <div class="pdetail">Klasyczni dystrybutorzy. DistroKid: $22.99/rok, nielimitowane uploady, 100% royalties. Brak AI.</div>
+      </div>
+      <span class="badge bg">Dystrybucja</span>
+    </div>
+  </div>
+
+  <div class="co co-green">
+    <strong>Luka rynkowa:</strong> Nikt nie oferuje pełnego flow "wrzuć plik → AI uploaduje wszędzie + tworzy kampanię promocyjną". Istniejące rozwiązania to albo dystrybucja bez promocji, albo promocja bez dystrybucji.
+  </div>
+</div>
+
+<!-- ═══════ 04 — PRZESZKODY ═══════ -->
+<div class="section" id="s4">
+  <div class="section-head"><span class="sn">04</span><h2>Główne przeszkody i ryzyka</h2></div>
+
+  <div class="card r">
+    <div class="card-title">6 najpoważniejszych blokad</div>
+    <ul>
+      <li><strong>Brak API uploadu na kluczowych platformach</strong> — Spotify, Apple Music, Tidal, Deezer. Jedyne wyjście: dystrybutor.</li>
+      <li><strong>Ryzyko prawne browser automation</strong> — łamanie ToS (CFAA w USA), aktywna detekcja botów, bany kont.</li>
+      <li><strong>Weryfikacja tożsamości artysty</strong> — Spotify for Artists, YouTube Artist Channel — proces ręczny, wymaga ludzkich danych.</li>
+      <li><strong>YouTube API Audit</strong> — od VII 2020 niezweryfikowane projekty uploadują tylko prywatne filmy. Audyt trwa tygodnie.</li>
+      <li><strong>Rate-limiting i quotas</strong> — YouTube: max ~6 wideo/dzień. Internet Archive: agresywne limity. SoundCloud: zależne od planu.</li>
+      <li><strong>Jakość AI vs. ludzka strategia</strong> — timing wydania, budowanie narracji, kontakt z playlistami — trudne do automatyzacji.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════ 05 — ZA/PRZECIW ═══════ -->
+<div class="section" id="s5">
+  <div class="section-head"><span class="sn">05</span><h2>Za i Przeciw — bilans projektu</h2></div>
+  <div class="pc">
+    <div class="pc-col pro">
+      <h4>✓ Za</h4>
+      <ul>
+        <li>Realna luka rynkowa — nikt nie robi end-to-end</li>
+        <li>3 platformy z działającym API uploadu</li>
+        <li>AI doskonałe w generowaniu opisów, tagów, tytułów SEO</li>
+        <li>Tworzenie postów social media — proste dla LLM</li>
+        <li>DistroKid ($25/rok) załatwia platformy streamingowe</li>
+        <li>Ogromna grupa docelowa: miliony niezależnych artystów</li>
+        <li>Niski koszt MVP — Python + kilka API = prototyp w tygodnie</li>
+        <li>Monetyzacja: freemium SaaS lub opłata per release</li>
+        <li>Trend AI w muzyce: Suno, Udio, AIVA generują nowych "artystów"</li>
+      </ul>
+    </div>
+    <div class="pc-col con">
+      <h4>✗ Przeciw</h4>
+      <ul>
+        <li>Pełna autonomia na "wszystkich portalach" technicznie niemożliwa</li>
+        <li>Kluczowe platformy nie mają publicznego API</li>
+        <li>Browser automation = łamanie ToS = bany</li>
+        <li>YouTube wymaga audytu Google</li>
+        <li>Rate-limiting ogranicza skalę</li>
+        <li>Bandcamp API tylko dla labeli</li>
+        <li>Ryzyko generowania "spamu" zamiast autentycznej promocji</li>
+        <li>Utrzymanie integracji: API się zmieniają</li>
+        <li>Konkurencja z venture-funded startupami</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 06 — OCENA ═══════ -->
+<div class="section" id="s6">
+  <div class="section-head"><span class="sn">06</span><h2>Ocena wykonalności w wymiarach</h2></div>
+
+  <div class="score-row"><span class="score-lbl">Techniczna wykonalność</span><div class="score-bar"><div class="score-fill" style="width:55%;background:var(--amber)"></div></div><span class="score-val" style="color:var(--amber)">5.5</span></div>
+  <div class="score-row"><span class="score-lbl">Potrzeba rynkowa</span><div class="score-bar"><div class="score-fill" style="width:85%;background:var(--green)"></div></div><span class="score-val" style="color:var(--green)">8.5</span></div>
+  <div class="score-row"><span class="score-lbl">Konkurencyjność</span><div class="score-bar"><div class="score-fill" style="width:70%;background:var(--accent-light)"></div></div><span class="score-val" style="color:var(--accent-light)">7.0</span></div>
+  <div class="score-row"><span class="score-lbl">Stosunek pracy do efektu</span><div class="score-bar"><div class="score-fill" style="width:60%;background:var(--amber)"></div></div><span class="score-val" style="color:var(--amber)">6.0</span></div>
+  <div class="score-row"><span class="score-lbl">Ryzyko prawne/ToS</span><div class="score-bar"><div class="score-fill" style="width:40%;background:var(--red)"></div></div><span class="score-val" style="color:var(--red)">4.0</span></div>
+  <div class="score-row"><span class="score-lbl">Potencjał monetyzacji</span><div class="score-bar"><div class="score-fill" style="width:65%;background:var(--accent-light)"></div></div><span class="score-val" style="color:var(--accent-light)">6.5</span></div>
+  <p style="margin-top:0.75rem;font-size:0.78rem;color:var(--text-muted)">Skala 1–10, gdzie 10 = najlepsze. Ryzyko prawne: niższa wartość = wyższe ryzyko.</p>
+</div>
+
+<!-- ═══════ 07 — ARCHITEKTURA ═══════ -->
+<div class="section" id="s7">
+  <div class="section-head"><span class="sn">07</span><h2>Architektura techniczna i stos</h2></div>
+
+  <div class="card g">
+    <div class="card-title">🏗️ Proponowany stos technologiczny</div>
+    <div class="card-sub">Technologie dobrane pod kątem łatwości nauki i dostępności materiałów</div>
+  </div>
+
+  <div class="tbl">
+    <div class="trow th"><span>Warstwa</span><span>Technologia</span><span>Uzasadnienie</span><span>Trudność</span></div>
+    <div class="trow"><span><strong>Język główny</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">Python 3.11+</span><span style="color:var(--text-dim)">Najpopularniejszy, ogromna społeczność</span><span class="badge bg">Łatwy</span></div>
+    <div class="trow"><span><strong>Framework API</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">FastAPI</span><span style="color:var(--text-dim)">Szybki, auto-dokumentacja Swagger</span><span class="badge bg">Łatwy</span></div>
+    <div class="trow"><span><strong>Frontend</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">React + Tailwind</span><span style="color:var(--text-dim)">Standard rynkowy, dużo materiałów</span><span class="badge bw">Średni</span></div>
+    <div class="trow"><span><strong>Baza danych</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">SQLite → PostgreSQL</span><span style="color:var(--text-dim)">Na start prosta, potem skalowalna</span><span class="badge bg">Łatwy</span></div>
+    <div class="trow"><span><strong>AI / LLM</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">Claude API / OpenAI</span><span style="color:var(--text-dim)">Generowanie opisów, tagów, postów</span><span class="badge bg">Łatwy</span></div>
+    <div class="trow"><span><strong>Kolejka zadań</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">Celery + Redis</span><span style="color:var(--text-dim)">Asynchroniczne uploady w tle</span><span class="badge bw">Średni</span></div>
+    <div class="trow"><span><strong>Hosting</strong></span><span style="font-family:'Fira Code',monospace;font-size:0.75rem">Railway / Render</span><span style="color:var(--text-dim)">Proste deploy, darmowy tier</span><span class="badge bg">Łatwy</span></div>
+  </div>
+
+  <h3>Co dokument architektury będzie zawierał</h3>
+  <div class="card c">
+    <ul>
+      <li><strong>Diagram wysokopoziomowy</strong> — główne części systemu i ich połączenia</li>
+      <li><strong>Przepływ danych</strong> — droga pliku od uploadu do publikacji na platformach</li>
+      <li><strong>Schemat bazy danych</strong> — jakie dane przechowujemy i jak</li>
+      <li><strong>Mapa zewnętrznych API</strong> — które API, do czego, limity</li>
+      <li><strong>Środowisko deweloperskie</strong> — co zainstalować, żeby zacząć kodować</li>
+      <li><strong>Diagramy Mermaid</strong> — rysowane kodem, wersjonowane w Git</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════ 08 — AI PIPELINE ═══════ -->
+<div class="section" id="s8">
+  <div class="section-head"><span class="sn">08</span><h2>AI Pipeline — serce systemu</h2></div>
+
+  <div class="card a">
+    <div class="card-title">🧠 Pipeline w 6 krokach</div>
+    <div class="card-sub">Element odróżniający produkt od prostego skryptu uploadującego</div>
+    <ul>
+      <li><strong>Krok 1 — Analiza audio:</strong> gatunek, BPM, nastrój, instrumenty (librosa / Essentia)</li>
+      <li><strong>Krok 2 — Generowanie metadanych:</strong> tytuł, opis SEO, tagi per platforma, kategorie (LLM)</li>
+      <li><strong>Krok 3 — Generowanie okładki:</strong> prompt na podstawie gatunku/nastroju → DALL-E / Stable Diffusion → 3 warianty</li>
+      <li><strong>Krok 4 — Content kit social media:</strong> posty + hashtagi, klipy 15/30/60s, stories, Reels</li>
+      <li><strong>Krok 5 — Strategia release:</strong> dzień/godzina publikacji, kolejność platform, plan 7-dniowy</li>
+      <li><strong>Krok 6 — Analityka post-release:</strong> zbieranie danych, raport, sugestie na przyszłość</li>
+    </ul>
+  </div>
+
+  <!-- Problem #4 — Model AI -->
+  <div class="prob">
+    <div class="prob-head">🧩 Problem #4: Który model AI do metadanych?</div>
+    <div class="sol"><span class="sol-tag sa">A — Claude API</span><p>~$3/mln tokenów (Sonnet). Najlepszy kontekst muzyczny, świetny polski, dobre trzymanie instrukcji.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — OpenAI GPT-4o</span><p>~$2.50/mln tokenów. Dobry SEO, więcej tutoriali. Silny w hashtagach i krótkich treściach marketingowych.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Lokalny model (Llama 3 / Mistral)</span><p>$0 po pobraniu. Wymaga GPU 8GB+ VRAM. Pełna prywatność, brak limitów, niższa jakość.</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Reverse proxy do komercyjnych API</span><p>Darmowy dostęp do modeli premium przez publiczne reverse proxy. Niestabilne, nielegalne (kradzież compute), ryzyko wycieku danych.</p></div>
+  </div>
+
+  <!-- Problem #5 — Okładki -->
+  <div class="prob">
+    <div class="prob-head">🧩 Problem #5: Jak generować okładki?</div>
+    <div class="sol"><span class="sol-tag sa">A — DALL-E 3 / GPT Image</span><p>~$0.04-0.08/obraz. Łatwa integracja, dobre wyniki, brak własnej infrastruktury.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — Stable Diffusion (lokalnie)</span><p>Darmowe, GPU min. 6GB VRAM. Pełna kontrola nad stylami. Fine-tuned modele na Civitai/HuggingFace.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Canva API + szablony</span><p>API do generowania grafik z szablonów. Mniej kreatywne, ale przewidywalne. $12/mies.</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Scraping + style transfer</span><p>Pobranie okładek podobnych gatunków → style transfer AI → "inspirowana" okładka. Derivative work, naruszenie praw autorskich.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ 09 — OBEJŚCIA ═══════ -->
+<div class="section" id="s9">
+  <div class="section-head"><span class="sn">09</span><h2>Strategie obejścia ograniczeń (#1–#8)</h2></div>
+
+  <p>Dla <strong>każdego</strong> zidentyfikowanego problemu — 3 legalne rozwiązania + 1 rozwiązanie "ostateczne" (☠️). Klasyfikacja: 🟢 A = bezpieczne, 🟡 B = partnerskie/średnie, 🔵 C = zaawansowane, ☠️ X = agresywne.</p>
+
+  <!-- #1 Spotify -->
+  <div class="prob">
+    <div class="prob-head">⛔ #1: Spotify / Apple Music / Tidal / Deezer — brak API uploadu</div>
+    <div class="sol">
+      <span class="sol-tag sa">A — Integracja z dystrybutorem</span>
+      <p><strong>DistroKid ($22.99/rok).</strong> Agent przygotowuje metadane → artysta loguje się i uploaduje ręcznie z gotowymi danymi.</p>
+    </div>
+    <div class="sol">
+      <span class="sol-tag sb">B — Partnerstwo API z dystrybutorem</span>
+      <p>Negocjacja z DistroKid, Amuse (darmowy), Ditto Music o dostęp do wewnętrznego API. Argument: "przysyłamy klientów". Czas: 2-6 mies.</p>
+    </div>
+    <div class="sol">
+      <span class="sol-tag sc">C — Własny dystrybutor</span>
+      <p>Rejestracja spółki, podpisanie umów ze Spotify/Apple/Tidal. Koszt: 5k-50k PLN, czas: 3-12 mies.</p>
+    </div>
+    <div class="sol">
+      <span class="sol-tag sx">☠️ Reverse-engineering API dystrybutora</span>
+      <p>Przechwycenie requestów DistroKid (devtools) + Playwright z fingerprint spoofing + proxy residencjalne. ⚠️ Łamie ToS, CFAA, utrata katalogu muzyki.</p>
+    </div>
+  </div>
+
+  <!-- #2 Bandcamp -->
+  <div class="prob">
+    <div class="prob-head">⛔ #2: Bandcamp — API tylko dla labeli</div>
+    <div class="sol"><span class="sol-tag sa">A — Pakiet "Bandcamp-ready"</span><p>AI generuje tytuły, opisy, tagi, cenę, okładkę 1400x1400px. Artysta uploaduje ręcznie w 2 min.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — Label proxy</span><p>Rejestracja labelu na Bandcamp → dostęp do API. Artyści "podpisują się" pod label.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Chrome Extension</span><p>Rozszerzenie auto-wypełniające formularze Bandcamp danymi z AI. Działa w przeglądarce artysty.</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Headless browser z sesją artysty</span><p>Artysta podaje credentials → Playwright loguje się → auto-upload. ⚠️ Przechowywanie cudzych haseł, łamanie ToS, RODO.</p></div>
+  </div>
+
+  <!-- #3 Social media -->
+  <div class="prob">
+    <div class="prob-head">⚠️ #3: TikTok / Instagram / Facebook — ryzykowne API</div>
+    <div class="sol"><span class="sol-tag sa">A — Content kit</span><p>AI tworzy klipy (15/30/60s), tekst, hashtagi, porę publikacji. Artysta dostaje ZIP + instrukcję.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — Oficjalne schedulery (Buffer / Hootsuite)</span><p>Buffer API (darmowy: 3 kanały), Hootsuite ($49/mies.), Meta Business Suite API, TikTok Content Posting API.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — TikTok Content Posting API</span><p>Oficjalne API, wymaga konta deweloperskiego + weryfikacji biznesowej. Proces 2-4 tygodnie.</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Appium + emulator Android</span><p>Emulacja telefonu + ADB. Bot otwiera aplikację, klika "dodaj wideo", uploaduje. ⚠️ TikTok/Instagram wykrywają emulatory. Ban niemal pewny.</p></div>
+  </div>
+
+  <!-- #6 YouTube Audit -->
+  <div class="prob">
+    <div class="prob-head">🔐 #6: YouTube wymaga audytu Google</div>
+    <div class="sol"><span class="sol-tag sa">A — Przejście audytu</span><p>Privacy policy, demo, formularz Google Cloud Console. Czas: 2-6 tyg.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — YouTube Studio jako fallback</span><p>Artysta uploaduje ręcznie, AI przygotowuje: tytuł, opis, tagi, miniaturkę.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Unlisted → Public</span><p>Upload jako "unlisted" (bez audytu) → artysta ręcznie zmienia na "public" jednym klikiem.</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Selenium z sesją YouTube</span><p>Export cookies → Selenium wchodzi na studio.youtube.com → emuluje upload. ⚠️ Google wykrywa automatyzację, CAPTCHA.</p></div>
+  </div>
+
+  <!-- #7 Rate-limiting -->
+  <div class="prob">
+    <div class="prob-head">⏱️ #7: Rate-limiting i quotas</div>
+    <div class="sol"><span class="sol-tag sa">A — Inteligentne kolejkowanie</span><p>Celery + Redis, skonfigurowane limity per platforma, rozłożenie uploadów w czasie.</p></div>
+    <div class="sol"><span class="sol-tag sb">B — Multi-konto (pule API keys)</span><p>Wiele projektów Google Cloud / kont deweloperskich. Rotacja kluczy API.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Priorytetyzacja platform</span><p>SoundCloud (natychmiast) → YouTube (1h) → Internet Archive (następny dzień).</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Farma kont + proxy</span><p>Setki kluczy API + proxy residencjalne ($15/GB). ⚠️ Łamie ToS Google, fraud detection.</p></div>
+  </div>
+
+  <!-- #8 Weryfikacja -->
+  <div class="prob">
+    <div class="prob-head">🪪 #8: Weryfikacja tożsamości artysty</div>
+    <div class="sol"><span class="sol-tag sa">A — Instrukcja krok-po-kroku</span><p>AI generuje checklist weryfikacji per platforma. Artysta robi sam z "asystentem".</p></div>
+    <div class="sol"><span class="sol-tag sb">B — Weryfikacja przez dystrybutora</span><p>DistroKid automatycznie weryfikuje na Spotify for Artists i Apple Music.</p></div>
+    <div class="sol"><span class="sol-tag sc">C — Agent concierge</span><p>AI prowadzi artystę w trybie konwersacji: "otwórz tę stronę, kliknij tu, wpisz to".</p></div>
+    <div class="sol"><span class="sol-tag sx">☠️ Automatyczna weryfikacja danymi artysty</span><p>OCR na dowodzie (Tesseract) + Selenium auto-fill. ⚠️ Skany dowodów = RODO art. 9, odpowiedzialność za wyciek.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ 10 — HARMONOGRAM ═══════ -->
+<div class="section" id="s10">
+  <div class="section-head"><span class="sn">10</span><h2>Harmonogram i roadmap MVP</h2></div>
+
+  <div class="card g">
+    <div class="card-sub">Praca hobbystyczna 10–15h/tydzień · 16 tygodni do pełnego MVP</div>
+  </div>
+
+  <div class="tl">
+    <div class="tl-i">
+      <span class="tl-ph">Tyg. 1–2</span>
+      <div class="tl-c">
+        <strong>📄 Faza 0: Dokumentacja</strong>
+        <p>Stworzenie wszystkich dokumentów z planu. Efekt: kompletna dokumentacja gotowa do wdrożenia.</p>
+        <div class="tl-t">8 dokumentów · ~6-8 sesji z AI</div>
+      </div>
+    </div>
+    <div class="tl-i">
+      <span class="tl-ph">Tyg. 3–4</span>
+      <div class="tl-c">
+        <strong>🧠 Faza 1: AI Metadata Generator</strong>
+        <p>Silnik AI: analiza audio (librosa) + generowanie metadanych (LLM). Efekt: .mp3 → tytuł, opis, tagi, sugestia okładki.</p>
+        <ul>
+          <li>Setup środowiska Python + FastAPI</li>
+          <li>Integracja Claude/OpenAI API</li>
+          <li>Prompty do generowania metadanych</li>
+          <li>Prosty CLI</li>
+        </ul>
+        <div class="tl-t">Kamień milowy: działający generator metadanych</div>
+      </div>
+    </div>
+    <div class="tl-i">
+      <span class="tl-ph">Tyg. 5–8</span>
+      <div class="tl-c">
+        <strong>⬆️ Faza 2: Auto-upload na 3 platformy</strong>
+        <p>YouTube API + SoundCloud API + Internet Archive. Efekt: jeden klik → upload na 3 platformy z AI metadanymi.</p>
+        <ul>
+          <li>OAuth flow dla YouTube i SoundCloud</li>
+          <li>Moduły uploadu (klasy Python)</li>
+          <li>Obsługa błędów, retry, logging</li>
+          <li>Web dashboard (React)</li>
+        </ul>
+        <div class="tl-t">Kamień milowy: pierwszy upload "z kodu"</div>
+      </div>
+    </div>
+    <div class="tl-i">
+      <span class="tl-ph">Tyg. 9–12</span>
+      <div class="tl-c">
+        <strong>📱 Faza 3: Social Media Content Kit</strong>
+        <p>AI generuje pakiety promocyjne. Integracja z Buffer/Hootsuite.</p>
+        <ul>
+          <li>Generator grafik (DALL-E / Canva API)</li>
+          <li>Generator klipów wideo (FFmpeg + szablony)</li>
+          <li>Integracja z Buffer API</li>
+          <li>Panel "content calendar"</li>
+        </ul>
+        <div class="tl-t">Kamień milowy: pełny content kit automatycznie</div>
+      </div>
+    </div>
+    <div class="tl-i">
+      <span class="tl-ph">Tyg. 13–16</span>
+      <div class="tl-c">
+        <strong>🤝 Faza 4: Dystrybutor + rozszerzenia</strong>
+        <p>Partnerstwo z dystrybutorem, Chrome Extension Bandcamp, analityka, beta testy.</p>
+        <ul>
+          <li>Negocjacje z DistroKid / Amuse</li>
+          <li>Chrome Extension do Bandcamp</li>
+          <li>Panel analityczny</li>
+          <li>Testy z prawdziwymi artystami</li>
+        </ul>
+        <div class="tl-t">Kamień milowy: produkt gotowy do beta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="co co-warn">
+    <strong>Realistyczne tempo:</strong> Przy nauce od zera i 10-15h/tyg., fazy mogą się rozciągnąć 1.5-2x. Po każdej fazie masz coś DZIAŁAJĄCEGO — nie czekasz 16 tygodni na efekt.
+  </div>
+</div>
+
+<!-- ═══════ 11 — BIZNES ═══════ -->
+<div class="section" id="s11">
+  <div class="section-head"><span class="sn">11</span><h2>Model biznesowy i monetyzacja</h2></div>
+
+  <div class="card c">
+    <div class="card-title">💰 Modele zarabiania</div>
+    <ul>
+      <li><strong>Freemium:</strong> darmowy tier (1 release/mies.) + płatny ($5-15/mies. za nielimitowane)</li>
+      <li><strong>Pay-per-release:</strong> $2-5 za każde wydanie (jednorazowo)</li>
+      <li><strong>Koszty stałe:</strong> hosting ~$20/mies., API AI ~$30/mies. (przy 100 użytkownikach), domena $12/rok</li>
+      <li><strong>Break-even:</strong> szacunkowo 30-50 płacących użytkowników</li>
+      <li><strong>Kanały pozyskania:</strong> Reddit (r/WeAreTheMusicMakers), Discord muzyczne, TikTok o produkcji</li>
+      <li><strong>Ryzyka:</strong> churn, zmiana API platform, konkurencja venture-funded</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════ 12 — MAPA DOKUMENTÓW ═══════ -->
+<div class="section" id="s12">
+  <div class="section-head"><span class="sn">12</span><h2>Mapa dokumentów — co jeszcze tworzymy</h2></div>
+
+  <div class="tbl">
+    <div class="trow th"><span>Dokument</span><span>Format</span><span>Priorytet</span><span>Status</span></div>
+    <div class="trow"><span><strong>Raport wykonalności</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML</span><span>—</span><span class="badge bg">Gotowy ✓</span></div>
+    <div class="trow"><span><strong>Plan dokumentacji</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML</span><span>—</span><span class="badge bg">Gotowy ✓</span></div>
+    <div class="trow"><span><strong>Kompletna instrukcja (ten dok.)</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML</span><span>Krytyczny</span><span class="badge bg">Gotowy ✓</span></div>
+    <div class="trow"><span><strong>Product Vision & Scope</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">MD / HTML</span><span>Krytyczny</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Architektura techniczna + diagramy</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML + Mermaid</span><span>Krytyczny</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Mapa integracji platform</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML / MD</span><span>Wysoki</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>AI Pipeline — prompty i modele</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">MD + JSON</span><span>Wysoki</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Strategia obejścia ograniczeń</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML</span><span>Wysoki</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Plan prawny i compliance</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">MD / HTML</span><span>Średni</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Harmonogram + MVP Roadmap</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML + Gantt</span><span>Wysoki</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>Model biznesowy</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">HTML</span><span>Średni</span><span class="badge br">Do zrobienia</span></div>
+    <div class="trow"><span><strong>menory.md</strong></span><span style="font-family:'Fira Code',monospace;font-size:.7rem">MD</span><span>Ciągły</span><span class="badge bw">Aktualiz.</span></div>
+  </div>
+
+  <h3>Kolejność pracy — sesje z AI</h3>
+  <div class="tl">
+    <div class="tl-i"><span class="tl-ph">Sesja 2</span><div class="tl-c"><strong>Product Vision & Scope</strong><p>Persona artysty, budżet, cele, "konstytucja" projektu.</p></div></div>
+    <div class="tl-i"><span class="tl-ph">Sesja 3</span><div class="tl-c"><strong>Architektura techniczna + diagramy</strong><p>Diagramy Mermaid, flow danych, schemat bazy.</p></div></div>
+    <div class="tl-i"><span class="tl-ph">Sesja 4</span><div class="tl-c"><strong>Mapa integracji platform</strong><p>Gotowe snippety Python: YouTube, SoundCloud, Internet Archive.</p></div></div>
+    <div class="tl-i"><span class="tl-ph">Sesja 5</span><div class="tl-c"><strong>AI Pipeline — prompty i modele</strong><p>Gotowe prompty, konfiguracja modeli, pipeline audio.</p></div></div>
+    <div class="tl-i"><span class="tl-ph">Sesja 6-7</span><div class="tl-c"><strong>Prawo, biznes, harmonogram szczegółowy</strong><p>Dopełnienie dokumentacji + finalizacja.</p></div></div>
+  </div>
+</div>
+
+<!-- ═══════ 13 — ZASADY WSPÓŁPRACY ═══════ -->
+<div class="section" id="s13">
+  <div class="section-head"><span class="sn">13</span><h2>Zasady współpracy AI–Użytkownik</h2></div>
+
+  <div class="card a">
+    <div class="card-title">📜 Reguły projektu</div>
+    <ul>
+      <li><strong>Język:</strong> Wszystkie dokumenty i rozmowy w języku polskim</li>
+      <li><strong>Legenda terminów:</strong> Na końcu każdej odpowiedzi/dokumentu — lista obcojęzycznych pojęć z definicjami</li>
+      <li><strong>menory.md:</strong> Aktualizowany po każdej sesji. Zawiera historię rozmów, decyzje, kontekst. Nowe czaty oparte na tym pliku</li>
+      <li><strong>Repo Git:</strong> github.com/tomsonxxx/Dystrybucja- — wszystkie dokumenty commitowane</li>
+      <li><strong>Problemy:</strong> Każdy problem = min. 3 rozwiązania + 1 "ostateczne" (☠️ agresywne)</li>
+      <li><strong>Oszczędność tokenów:</strong> Optymalizacja zapytań z zachowaniem pełnego kontekstu</li>
+      <li><strong>Workflow:</strong> AI przygotowuje draft → Użytkownik czyta → uwagi → iteracja → zatwierdzenie</li>
+      <li><strong>Oznaczenia rozwiązań:</strong> 🟢 A = bezpieczne, 🟡 B = partnerskie, 🔵 C = zaawansowane, ☠️ X = agresywne</li>
+    </ul>
+  </div>
+
+  <div class="co">
+    <strong>Dane potrzebne od Ciebie do Sesji 2 (Product Vision):</strong><br>
+    1. Czy sam jesteś artystą/producentem, czy budujesz dla innych?<br>
+    2. Jaki gatunek muzyczny?<br>
+    3. Czy masz konta na platformach (YouTube, SoundCloud, Bandcamp)?<br>
+    4. Budżet na narzędzia (API, hosting, dystrybutor)?<br>
+    5. Cel: narzędzie osobiste czy SaaS do sprzedaży?
+  </div>
+</div>
+
+<!-- ═══════ 14 — LEGENDA ═══════ -->
+<div class="section" id="s14">
+  <div class="section-head"><span class="sn">14</span><h2>Legenda terminów</h2></div>
+</div>
+
+<div class="legend">
+  <h3>📖 Słownik pojęć technicznych</h3>
+  <div class="leg-grid">
+    <div class="leg-item"><strong>API</strong> — Application Programming Interface — interfejs do komunikacji między programami</div>
+    <div class="leg-item"><strong>OAuth</strong> — standard autoryzacji pozwalający aplikacji działać w imieniu użytkownika</div>
+    <div class="leg-item"><strong>Endpoint</strong> — konkretny adres URL w API, pod który wysyłasz dane</div>
+    <div class="leg-item"><strong>Rate-limiting</strong> — ograniczenie liczby zapytań do API w jednostce czasu</div>
+    <div class="leg-item"><strong>Quota</strong> — limit "jednostek" API zużywalnych dziennie</div>
+    <div class="leg-item"><strong>ToS</strong> — Terms of Service — regulamin platformy</div>
+    <div class="leg-item"><strong>CFAA</strong> — Computer Fraud and Abuse Act — ustawa USA o oszustwach komputerowych</div>
+    <div class="leg-item"><strong>RODO/GDPR</strong> — europejskie przepisy o ochronie danych osobowych</div>
+    <div class="leg-item"><strong>Headless browser</strong> — przeglądarka bez GUI, sterowana kodem</div>
+    <div class="leg-item"><strong>Playwright/Selenium</strong> — narzędzia do automatyzacji przeglądarek</div>
+    <div class="leg-item"><strong>Stealth plugin</strong> — wtyczka ukrywająca fakt sterowania przez bota</div>
+    <div class="leg-item"><strong>Fingerprint</strong> — "odcisk palca" przeglądarki identyfikujący urządzenie</div>
+    <div class="leg-item"><strong>Proxy residencjalne</strong> — serwery pośredniczące z IP wyglądającymi jak domowe</div>
+    <div class="leg-item"><strong>LLM</strong> — Large Language Model — duży model językowy (Claude, GPT)</div>
+    <div class="leg-item"><strong>FastAPI</strong> — nowoczesny framework Python do budowania API webowych</div>
+    <div class="leg-item"><strong>Celery</strong> — system kolejkowania zadań asynchronicznych w Pythonie</div>
+    <div class="leg-item"><strong>Redis</strong> — szybka baza danych w pamięci, broker kolejek</div>
+    <div class="leg-item"><strong>React</strong> — biblioteka JavaScript do budowania interfejsów</div>
+    <div class="leg-item"><strong>Tailwind</strong> — framework CSS do szybkiego stylowania</div>
+    <div class="leg-item"><strong>BPM</strong> — Beats Per Minute — tempo utworu muzycznego</div>
+    <div class="leg-item"><strong>Librosa</strong> — biblioteka Python do analizy audio</div>
+    <div class="leg-item"><strong>FFmpeg</strong> — narzędzie do obróbki wideo/audio z terminala</div>
+    <div class="leg-item"><strong>CLI</strong> — Command Line Interface — interfejs tekstowy (terminal)</div>
+    <div class="leg-item"><strong>SEO</strong> — Search Engine Optimization — optymalizacja pod wyszukiwarki</div>
+    <div class="leg-item"><strong>Multipart upload</strong> — wysyłanie plików przez HTTP (dzielenie na części)</div>
+    <div class="leg-item"><strong>Freemium</strong> — model: podstawa za darmo, zaawansowane płatne</div>
+    <div class="leg-item"><strong>Break-even</strong> — punkt: przychody = koszty (zero zysku/straty)</div>
+    <div class="leg-item"><strong>Churn</strong> — wskaźnik odejścia użytkowników z usługi</div>
+    <div class="leg-item"><strong>Unit economics</strong> — kalkulacja zysku/kosztu na jednego użytkownika</div>
+    <div class="leg-item"><strong>MVP</strong> — Minimum Viable Product — minimalna wersja produktu do testów</div>
+    <div class="leg-item"><strong>SaaS</strong> — Software as a Service — oprogramowanie jako usługa (chmura)</div>
+    <div class="leg-item"><strong>OCR</strong> — Optical Character Recognition — rozpoznawanie tekstu ze zdjęć</div>
+    <div class="leg-item"><strong>AES-256</strong> — algorytm szyfrowania (standard wojskowy)</div>
+    <div class="leg-item"><strong>Appium/ADB</strong> — narzędzia do automatyzacji aplikacji mobilnych</div>
+    <div class="leg-item"><strong>Dublin Core</strong> — standard metadanych dla zasobów cyfrowych</div>
+    <div class="leg-item"><strong>Mermaid</strong> — narzędzie do rysowania diagramów kodem tekstowym</div>
+    <div class="leg-item"><strong>Swagger</strong> — narzędzie do auto-dokumentacji API</div>
+  </div>
+</div>
+
+<div class="footer">
+  Kompletna Instrukcja Projektu v1.0 · AI Music Distribution Agent · 6 kwietnia 2026<br>
+  Repo: github.com/tomsonxxx/Dystrybucja- · Plik pamięci: menory.md
+</div>
+
+</div>
+</body>
+</html>
