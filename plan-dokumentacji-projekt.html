@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Dokumentacji — AI Music Distribution Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07070c;
+  --surface: #0f0f18;
+  --surface-2: #161622;
+  --surface-3: #1e1e30;
+  --border: #2a2a3e;
+  --text: #e8e6e3;
+  --text-dim: #8a8896;
+  --text-muted: #5a5870;
+  --accent: #6366f1;
+  --accent-light: #a5b4fc;
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.07);
+  --green-border: rgba(34,197,94,0.18);
+  --red: #f87171;
+  --red-bg: rgba(248,113,113,0.07);
+  --red-border: rgba(248,113,113,0.18);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251,191,36,0.07);
+  --amber-border: rgba(251,191,36,0.18);
+  --cyan: #22d3ee;
+  --cyan-bg: rgba(34,211,238,0.07);
+  --skull: #ef4444;
+  --skull-bg: rgba(239,68,68,0.06);
+  --skull-border: rgba(239,68,68,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased}
+.container{max-width:920px;margin:0 auto;padding:2rem 1.5rem}
+
+/* HERO */
+.hero{text-align:center;padding:5rem 0 3rem;border-bottom:1px solid var(--border);margin-bottom:3rem;position:relative}
+.hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:4px;color:var(--accent-light);margin-bottom:1.5rem;opacity:.8}
+.hero h1{font-family:'DM Serif Display',serif;font-size:2.2rem;font-weight:400;line-height:1.25;margin-bottom:1rem;background:linear-gradient(135deg,#e8e6e3 20%,var(--accent-light) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text-dim);font-size:.9rem;max-width:640px;margin:0 auto;line-height:1.8}
+
+/* SECTION */
+.section{margin-bottom:3.5rem}
+.section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent-light);background:rgba(99,102,241,0.1);padding:4px 10px;border-radius:20px;letter-spacing:1px}
+.section h2{font-family:'DM Serif Display',serif;font-size:1.45rem;font-weight:400}
+.section h3{font-size:1rem;font-weight:600;margin:1.8rem 0 .75rem;color:var(--accent-light)}
+.section h4{font-size:.92rem;font-weight:600;margin:1.2rem 0 .5rem;color:var(--text)}
+p,.desc{margin-bottom:1rem;font-size:.88rem;color:var(--text-dim);line-height:1.8}
+
+/* MODULE CARD */
+.mod-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.mod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mod-card.c-green::before{background:var(--green)}
+.mod-card.c-accent::before{background:var(--accent)}
+.mod-card.c-amber::before{background:var(--amber)}
+.mod-card.c-cyan::before{background:var(--cyan)}
+.mod-card.c-red::before{background:var(--red)}
+.mod-title{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.mod-subtitle{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.75rem}
+.mod-card p{font-size:.84rem;margin-bottom:.5rem}
+.mod-contents{margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(255,255,255,.04)}
+.mod-contents li{font-size:.82rem;color:var(--text-dim);margin-bottom:.4rem;margin-left:1.2rem;line-height:1.6}
+
+/* PROBLEM BLOCK */
+.problem{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin:1.25rem 0;overflow:hidden}
+.problem-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
+.problem-icon{font-size:1rem}
+.problem-title{font-weight:600;font-size:.9rem}
+.solution{padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.03)}
+.solution:last-child{border-bottom:none}
+.sol-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:.5rem}
+.sol-a{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.sol-b{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.sol-c{background:var(--cyan-bg);color:var(--cyan);border:1px solid rgba(34,211,238,.18)}
+.sol-x{background:var(--skull-bg);color:var(--skull);border:1px solid var(--skull-border)}
+.solution p{font-size:.82rem;margin-bottom:.4rem}
+.solution .steps{margin:.5rem 0 0 1rem}
+.solution .steps li{font-size:.8rem;color:var(--text-dim);margin-bottom:.3rem;line-height:1.6}
+.solution strong{color:var(--text)}
+
+/* TIMELINE */
+.timeline{margin:1.5rem 0}
+.tl-item{display:flex;gap:1rem;margin-bottom:1.5rem;align-items:flex-start;position:relative}
+.tl-item::before{content:'';position:absolute;left:47px;top:26px;bottom:-18px;width:1px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-phase{font-family:'JetBrains Mono',monospace;font-size:.6rem;background:var(--surface-2);border:1px solid var(--border);padding:4px 10px;border-radius:6px;white-space:nowrap;color:var(--accent-light);min-width:95px;text-align:center;margin-top:2px}
+.tl-content{flex:1}
+.tl-content strong{color:var(--text);font-size:.9rem}
+.tl-content p{font-size:.82rem;color:var(--text-dim);margin:.3rem 0 0}
+.tl-content .tl-time{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--amber);margin-top:.3rem}
+.tl-content ul{margin:.4rem 0 0 1rem}
+.tl-content li{font-size:.8rem;color:var(--text-dim);margin-bottom:.25rem}
+
+/* DELIVERABLE TABLE */
+.del-grid{display:grid;gap:.6rem;margin:1rem 0}
+.del-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:.75rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.8rem}
+.del-row.header{background:var(--surface-2);font-weight:600;color:var(--text);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+.del-name{color:var(--text);font-weight:500}
+.del-format{color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.7rem}
+.del-status{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 8px;border-radius:3px;text-align:center}
+.del-todo{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.del-wip{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.del-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+
+/* CALLOUT */
+.callout{background:rgba(99,102,241,0.05);border-left:3px solid var(--accent);padding:1rem 1.25rem;border-radius:0 10px 10px 0;margin:1.5rem 0;font-size:.84rem;color:var(--text-dim)}
+.callout strong{color:var(--text)}
+.callout-warn{border-left-color:var(--amber);background:var(--amber-bg)}
+.callout-danger{border-left-color:var(--red);background:var(--skull-bg)}
+
+/* BADGE */
+.badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;font-weight:500;white-space:nowrap}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem 2rem;margin:2rem 0}
+.toc h3{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:1rem;color:var(--text)}
+.toc-list{list-style:none;counter-reset:toc}
+.toc-list li{counter-increment:toc;margin-bottom:.5rem;font-size:.84rem;color:var(--text-dim);display:flex;align-items:baseline;gap:.6rem}
+.toc-list li::before{content:counter(toc,decimal-leading-zero);font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent-light);min-width:22px}
+.toc-list li strong{color:var(--text);font-weight:500}
+
+/* FOOTER */
+.footer{text-align:center;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem;color:var(--text-muted);font-size:.7rem}
+
+/* LEGEND */
+.legend{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin:2rem 0}
+.legend h3{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:1rem}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem}
+@media(max-width:640px){.legend-grid{grid-template-columns:1fr}.del-row{grid-template-columns:1fr}}
+.legend-item{font-size:.78rem;color:var(--text-dim);line-height:1.6}
+.legend-item strong{color:var(--accent-light);font-weight:500;font-size:.8rem}
+
+@media(max-width:640px){
+  .hero h1{font-size:1.6rem}
+  .del-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-label">Master Documentation Plan v1.0</div>
+  <h1>Plan Budowy Pełnej Dokumentacji Projektu</h1>
+  <p>AI Agent Autonomicznej Dystrybucji i Promocji Muzyki — kompletny plan dokumentacji, harmonogram, narzędzia, rozwiązania problemów. Każdy moduł rozpisany krok po kroku z wariantami rozwiązań.</p>
+</div>
+
+<!-- ═══════════════ SPIS TREŚCI ═══════════════ -->
+<div class="toc">
+  <h3>Spis treści dokumentacji</h3>
+  <ul class="toc-list">
+    <li><strong>Mapa dokumentów</strong> — co tworzymy, w jakiej kolejności, w jakim formacie</li>
+    <li><strong>Wizja i zakres produktu</strong> — co budujemy, dla kogo, czym to NIE jest</li>
+    <li><strong>Architektura techniczna</strong> — stos technologiczny, diagramy, przepływy danych</li>
+    <li><strong>Mapa integracji platform</strong> — API każdej platformy: endpointy, limity, auth</li>
+    <li><strong>AI Pipeline</strong> — modele, prompty, generowanie metadanych/grafik/postów</li>
+    <li><strong>Strategia obejścia ograniczeń</strong> — 3+1 rozwiązań każdego problemu</li>
+    <li><strong>Plan prawny i compliance</strong> — ToS, prawa autorskie, RODO, ryzyka</li>
+    <li><strong>Harmonogram i MVP</strong> — fazy, kamienie milowe, kryteria sukcesu</li>
+    <li><strong>Model biznesowy</strong> — pricing, grupy docelowe, unit economics</li>
+    <li><strong>Legenda pojęć</strong> — słownik terminów technicznych</li>
+  </ul>
+</div>
+
+<!-- ═══════════════ 01 — MAPA DOKUMENTÓW ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2>Mapa dokumentów — co tworzymy</h2>
+  </div>
+
+  <p>Poniżej pełna lista dokumentów do stworzenia. Każdy ma określony format, priorytet i status. Będziemy je tworzyć jeden po drugim w kolejnych rozmowach — AI przygotowuje draft, Ty go zatwierdzasz lub korygujemy.</p>
+
+  <div class="del-grid">
+    <div class="del-row header">
+      <span>Dokument</span><span>Format</span><span>Priorytet</span><span>Status</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Raport wykonalności (feasibility)</span>
+      <span class="del-format">HTML</span><span>—</span>
+      <span class="del-status del-done">Gotowy ✓</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Plan dokumentacji (ten dokument)</span>
+      <span class="del-format">HTML</span><span>Krytyczny</span>
+      <span class="del-status del-wip">W trakcie</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Product Vision & Scope</span>
+      <span class="del-format">MD / HTML</span><span>Krytyczny</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Architektura techniczna + diagramy</span>
+      <span class="del-format">HTML + Mermaid</span><span>Krytyczny</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Mapa integracji platform (API docs)</span>
+      <span class="del-format">HTML / MD</span><span>Wysoki</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">AI Pipeline — prompty i modele</span>
+      <span class="del-format">MD + JSON</span><span>Wysoki</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Strategia obejścia ograniczeń</span>
+      <span class="del-format">HTML</span><span>Wysoki</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Plan prawny i compliance</span>
+      <span class="del-format">MD / HTML</span><span>Średni</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Harmonogram + MVP Roadmap</span>
+      <span class="del-format">HTML + Gantt</span><span>Wysoki</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Model biznesowy i monetyzacja</span>
+      <span class="del-format">HTML</span><span>Średni</span>
+      <span class="del-status del-todo">Do zrobienia</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Menory.md (plik pamięci projektu)</span>
+      <span class="del-format">MD</span><span>Ciągły</span>
+      <span class="del-status del-wip">Aktualizowany</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Jak będziemy pracować:</strong> W każdej sesji bierzemy 1-2 dokumenty. AI przygotowuje pełny draft → Ty czytasz → zgłaszasz uwagi → iterujemy aż do zatwierdzenia. Po każdej sesji aktualizuję menory.md.
+  </div>
+</div>
+
+<!-- ═══════════════ 02 — WIZJA I ZAKRES ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2>Moduł: Wizja i zakres produktu</h2>
+  </div>
+
+  <div class="mod-card c-accent">
+    <div class="mod-title">📐 Product Vision & Scope</div>
+    <div class="mod-subtitle">Cel: zdefiniować CO budujemy i czym to NIE jest</div>
+    <p>Ten dokument to "konstytucja" projektu. Każda przyszła decyzja techniczna i biznesowa musi być z nim spójna. Bez niego projekt "rozlewa się" — dodajesz funkcje, które nie prowadzą do celu.</p>
+    <div class="mod-contents">
+      <strong style="font-size:.82rem">Co dokument musi zawierać:</strong>
+      <ul>
+        <li><strong>Elevator pitch</strong> — opis produktu w 2 zdaniach (kto, co, po co)</li>
+        <li><strong>Persona użytkownika</strong> — kim jest artysta, który z tego korzysta? (wiek, gatunek muzyczny, budżet, umiejętności tech)</li>
+        <li><strong>Problem statement</strong> — jaki problem rozwiązujemy? dlaczego obecne rozwiązania nie wystarczają?</li>
+        <li><strong>Zakres MVP</strong> — minimum funkcji do pierwszego testu z użytkownikami</li>
+        <li><strong>Out of scope</strong> — czego NIE robimy (np. nie generujemy muzyki, nie zarządzamy prawami autorskimi)</li>
+        <li><strong>Success metrics</strong> — jak mierzymy, czy to działa? (np. 10 artystów użyło, 50 uploady w miesiąc)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>🔧 Dane potrzebne od Ciebie</h3>
+  <p>Żeby stworzyć ten dokument, zapytam Cię m.in. o:</p>
+  <div class="callout">
+    1. Czy sam jesteś artystą/producentem, czy budujesz to dla innych?<br>
+    2. Jaki gatunek/gatunki muzyczne? (wpływa na wybór platform)<br>
+    3. Czy masz konto na którejś z platform? (YouTube, SoundCloud, Bandcamp)<br>
+    4. Budżet na narzędzia (API, hosting, dystrybutor)?<br>
+    5. Czy chcesz to sprzedawać innym artystom, czy budować dla siebie?
+  </div>
+</div>
+
+<!-- ═══════════════ 03 — ARCHITEKTURA ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2>Moduł: Architektura techniczna</h2>
+  </div>
+
+  <div class="mod-card c-green">
+    <div class="mod-title">🏗️ System Architecture</div>
+    <div class="mod-subtitle">Cel: narysować "mapę systemu" — co z czym rozmawia i jak</div>
+    <p>Architektura to plan budowlany. Bez niej kodujesz "na ślepo" — każdy moduł działa osobno, a potem nie pasują do siebie. Dokument będzie zawierał diagramy (robione w Mermaid — narzędzie do rysowania schematów kodem).</p>
+    <div class="mod-contents">
+      <strong style="font-size:.82rem">Co dokument musi zawierać:</strong>
+      <ul>
+        <li><strong>Diagram wysokopoziomowy</strong> — "pudełka i strzałki" pokazujące główne części systemu</li>
+        <li><strong>Stos technologiczny</strong> — jakie języki, frameworki, bazy danych, API</li>
+        <li><strong>Przepływ danych</strong> — droga pliku muzycznego od uploadu do publikacji</li>
+        <li><strong>Schemat bazy danych</strong> — jakie dane przechowujemy i jak</li>
+        <li><strong>Mapa API</strong> — które zewnętrzne API używamy i do czego</li>
+        <li><strong>Środowisko deweloperskie</strong> — co zainstalować, żeby zacząć kodować</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Proponowany stos technologiczny</h3>
+  <p>Wybieram technologie najbardziej przyjazne początkującym, z największą ilością tutoriali online:</p>
+
+  <div class="del-grid">
+    <div class="del-row">
+      <span class="del-name">Język główny</span>
+      <span class="del-format">Python 3.11+</span>
+      <span>Najpopularniejszy, ogromna społeczność</span>
+      <span class="badge badge-green">Łatwy</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Framework webowy</span>
+      <span class="del-format">FastAPI</span>
+      <span>Szybki, nowoczesny, auto-dokumentacja</span>
+      <span class="badge badge-green">Łatwy</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Frontend/Dashboard</span>
+      <span class="del-format">React + Tailwind</span>
+      <span>Standardowy wybór, dużo materiałów</span>
+      <span class="badge badge-amber">Średni</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Baza danych</span>
+      <span class="del-format">SQLite → PostgreSQL</span>
+      <span>Na start prosta, potem skalowalna</span>
+      <span class="badge badge-green">Łatwy</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">AI / LLM</span>
+      <span class="del-format">Claude API / OpenAI</span>
+      <span>Do generowania opisów, tagów, postów</span>
+      <span class="badge badge-green">Łatwy</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Kolejka zadań</span>
+      <span class="del-format">Celery + Redis</span>
+      <span>Asynchroniczne uploady w tle</span>
+      <span class="badge badge-amber">Średni</span>
+    </div>
+    <div class="del-row">
+      <span class="del-name">Hosting</span>
+      <span class="del-format">Railway / Render</span>
+      <span>Proste deploy, darmowy tier na start</span>
+      <span class="badge badge-green">Łatwy</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 04 — MAPA INTEGRACJI ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2>Moduł: Mapa integracji platform</h2>
+  </div>
+
+  <div class="mod-card c-cyan">
+    <div class="mod-title">🔌 Platform Integration Map</div>
+    <div class="mod-subtitle">Cel: dokumentacja techniczna KAŻDEJ platformy — endpointy, limity, kody, auth</div>
+    <p>To będzie najgrubszy dokument — "podręcznik" do każdej platformy z gotowym kodem w Pythonie. Dla każdej platformy opiszemy: jak się zalogować, jak uploadować, jakie są limity, co może pójść źle, i gotowe snippety kodu.</p>
+  </div>
+
+  <h3>Platformy Tier 1 — pełne API (budujemy najpierw)</h3>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🟢</span>
+      <span class="problem-title">YouTube Data API v3 — upload wideo</span>
+    </div>
+    <div class="solution">
+      <p><strong>Co udokumentujemy:</strong> OAuth 2.0 flow, endpoint videos.insert, quota system (10k jedn./dzień), wymagany audyt Google dla publicznych uploady, obsługa miniaturek, playlisty, opisy SEO, tagi.</p>
+      <p><strong>Gotowe elementy:</strong> Skrypt Python do uploadu, szablony metadanych, kalkulator quota.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🟢</span>
+      <span class="problem-title">SoundCloud API — upload audio</span>
+    </div>
+    <div class="solution">
+      <p><strong>Co udokumentujemy:</strong> OAuth 2.1, endpoint POST /tracks (multipart, do 500MB), tagowanie, playlist management, artwork upload, metadane.</p>
+      <p><strong>Gotowe elementy:</strong> Klasa Python SoundCloudUploader, obsługa błędów, retry logic.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🟢</span>
+      <span class="problem-title">Internet Archive — upload do kolekcji</span>
+    </div>
+    <div class="solution">
+      <p><strong>Co udokumentujemy:</strong> Biblioteka Python "internetarchive", CLI "ia", kolekcje opensource_audio/movies, rate-limiting, best practices unikania blokad.</p>
+      <p><strong>Gotowe elementy:</strong> Skrypt batch upload, konfiguracja metadanych Dublin Core.</p>
+    </div>
+  </div>
+
+  <h3>Platformy Tier 2 — brak API uploadu (tu potrzebne obejścia)</h3>
+  <p>Dla każdej platformy bez API przygotujemy pełną analizę z rozwiązaniami:</p>
+
+  <!-- === SPOTIFY === -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">⛔</span>
+      <span class="problem-title">Problem #1: Spotify / Apple Music / Tidal / Deezer — brak API uploadu</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — bezpieczne</span>
+      <p><strong>Integracja z dystrybutorem (DistroKid / TuneCore)</strong></p>
+      <p>Używamy DistroKid ($22.99/rok) jako pośrednika. Agent przygotowuje wszystkie metadane, artysta klika "wyślij" → dane lecą na konto DistroKid. Nie budujemy własnego uploadu na platformy streamingowe.</p>
+      <ul class="steps">
+        <li>Założenie konta DistroKid</li>
+        <li>AI generuje metadane w formacie wymaganym przez DistroKid</li>
+        <li>Artysta loguje się i uploaduje ręcznie (ale z gotowymi danymi)</li>
+        <li>Koszt: $23/rok — znacznie taniej niż własna infrastruktura</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — partnerskie</span>
+      <p><strong>Partnerstwo API z dystrybutorem</strong></p>
+      <p>Negocjacja z DistroKid, Amuse (darmowy), lub Ditto Music o dostęp do ich wewnętrznego API. Jako "narzędzie, które przysyła im klientów" masz argument negocjacyjny.</p>
+      <ul class="steps">
+        <li>Napisanie propozycji partnerskiej do 3-5 dystrybutorów</li>
+        <li>Demonstracja MVP jako dowód wartości</li>
+        <li>Negocjacja warunków API access</li>
+        <li>Czas: 2-6 miesięcy na zamknięcie dealu</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — własny dystrybutor</span>
+      <p><strong>Zostanie licencjonowanym dystrybutorem</strong></p>
+      <p>Podpisanie umów dystrybucyjnych bezpośrednio ze Spotify, Apple, Tidal itd. Wymaga zarejestrowania firmy, prawników, i spełnienia wymagań platform.</p>
+      <ul class="steps">
+        <li>Rejestracja spółki (sp. z o.o. / LLC)</li>
+        <li>Kontakt z zespołami partnerskimi Spotify for Labels, Apple Music for Artists</li>
+        <li>Spełnienie wymagań: katalog min. X utworów, zabezpieczenia techniczne</li>
+        <li>Koszt: 5k-50k PLN (prawnik + setup), czas: 3-12 mies.</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Reverse-engineering API dystrybutora + browser automation</strong></p>
+      <p>Przechwycenie komunikacji sieciowej DistroKid (devtools → Network tab), odtworzenie ich wewnętrznych requestów API, i automatyzacja uploadu przez Playwright z emulacją ludzkiego zachowania.</p>
+      <ul class="steps">
+        <li>Analiza requestów HTTP w panelu DistroKid</li>
+        <li>Playwright z fingerprint spoofing (stealth plugin)</li>
+        <li>Randomizowane opóźnienia, losowe ruchy myszą</li>
+        <li>Rotacja IP przez proxy residencjalne</li>
+        <li>⚠️ Łamie ToS DistroKid → ban konta, utrata katalogu muzyki</li>
+        <li>⚠️ Potencjalne naruszenie CFAA (Computer Fraud and Abuse Act)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- === BANDCAMP === -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">⛔</span>
+      <span class="problem-title">Problem #2: Bandcamp — API tylko dla labeli</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — prepopulacja</span>
+      <p><strong>AI przygotowuje pakiet "Bandcamp-ready"</strong></p>
+      <p>Agent generuje: tytuły, opisy, tagi, cenę sugerowaną, okładkę w dokładnym formacie Bandcamp (1400x1400px). Artysta dostaje gotowy pakiet z instrukcją i uploaduje ręcznie w 2 minuty.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — label proxy</span>
+      <p><strong>Założenie labelu / konta labelowego</strong></p>
+      <p>Rejestracja jako "label" na Bandcamp daje dostęp do API. Artyści "podpisują się" pod Twój label, upload idzie przez API.</p>
+      <ul class="steps">
+        <li>Rejestracja labelu na Bandcamp (bezpłatne)</li>
+        <li>Kontakt z Bandcamp o API access</li>
+        <li>Umowa z artystami: licencja do dystrybucji pod labelem</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — Chrome Extension</span>
+      <p><strong>Rozszerzenie przeglądarki artysty</strong></p>
+      <p>Budowa Chrome Extension, które artysta instaluje. Extension auto-wypełnia formularze Bandcamp danymi z AI. Działa w przeglądarce ARTYSTY, nie na serwerze → mniejsze ryzyko bana.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Headless browser z sesją artysty</strong></p>
+      <p>Artysta podaje credentials → Playwright loguje się na jego konto Bandcamp → automatycznie wypełnia formularz uploadu → publikuje. Pełna emulacja ludzkiego przeglądarki.</p>
+      <ul class="steps">
+        <li>Playwright + stealth plugin (undetected-playwright)</li>
+        <li>Emulacja device fingerprint artysty</li>
+        <li>Przechowywanie credentials (szyfrowanie AES-256)</li>
+        <li>⚠️ Przechowywanie cudzych haseł = ogromne ryzyko bezpieczeństwa</li>
+        <li>⚠️ Łamie ToS Bandcamp + potencjalne naruszenia RODO</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- === SOCIAL MEDIA === -->
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">⚠️</span>
+      <span class="problem-title">Problem #3: TikTok / Instagram / Facebook — ryzykowne API</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — content kit</span>
+      <p><strong>Generowanie gotowych pakietów do ręcznego wrzucenia</strong></p>
+      <p>AI tworzy: gotowe klipy wideo (15s, 30s, 60s), tekst postu, hashtagi, najlepszą porę publikacji. Artysta dostaje ZIP z materiałami + instrukcję.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — oficjalne schedulery</span>
+      <p><strong>Integracja z Buffer / Hootsuite / Later API</strong></p>
+      <p>Te narzędzia MAJĄ oficjalne API do planowania postów. Nie uploadujesz bezpośrednio na TikTok — przesyłasz do Buffer, który to robi za Ciebie legalnie.</p>
+      <ul class="steps">
+        <li>Buffer API (darmowy plan: 3 kanały)</li>
+        <li>Hootsuite API (od $49/mies., ale silniejsze)</li>
+        <li>Meta Business Suite API (oficjalne, dla FB + IG)</li>
+        <li>TikTok Content Posting API (wymaga konta biznesowego)</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — TikTok Creator Tools</span>
+      <p><strong>TikTok Content Posting API (oficjalne)</strong></p>
+      <p>TikTok ma oficjalne API do postowania, ale wymaga: konta deweloperskiego, weryfikacji biznesowej, review aplikacji. Proces trwa 2-4 tygodnie.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Appium + emulator Android / ADB</strong></p>
+      <p>Emulacja telefonu z zainstalowanym TikTokiem/Instagramem. Bot działa jak człowiek: otwiera aplikację, klika "dodaj wideo", uploaduje, wpisuje opis, publikuje.</p>
+      <ul class="steps">
+        <li>Android emulator (Genymotion / Android Studio AVD)</li>
+        <li>Appium / ADB do sterowania aplikacjami mobilnymi</li>
+        <li>Frida framework do obejścia detekcji rootowania</li>
+        <li>Losowe wzorce interakcji (human-like delays)</li>
+        <li>⚠️ TikTok i Instagram aktywnie wykrywają emulatory</li>
+        <li>⚠️ Permanentny ban konta jest niemal pewny</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 05 — AI PIPELINE ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2>Moduł: AI Pipeline</h2>
+  </div>
+
+  <div class="mod-card c-accent">
+    <div class="mod-title">🧠 AI Pipeline — serce systemu</div>
+    <div class="mod-subtitle">Cel: opisać JAK ai generuje wartość na każdym etapie</div>
+    <p>To jest ten element, który odróżnia nasz produkt od prostego skryptu do uploadu. AI analizuje muzykę i tworzy kompletny pakiet promocyjny. Dokument będzie zawierał gotowe prompty, które wystarczy skopiować.</p>
+    <div class="mod-contents">
+      <strong style="font-size:.82rem">Pipeline składa się z 6 kroków:</strong>
+      <ul>
+        <li><strong>Krok 1 — Analiza audio:</strong> Rozpoznanie gatunku, tempa (BPM), nastroju, kluczowych instrumentów (biblioteka librosa / Essentia)</li>
+        <li><strong>Krok 2 — Generowanie metadanych:</strong> LLM tworzy tytuł (jeśli brak), opis SEO, tagi (osobne dla każdej platformy), kategorie</li>
+        <li><strong>Krok 3 — Generowanie okładki:</strong> Na podstawie gatunku i nastroju → prompt do DALL-E / Midjourney / Stable Diffusion → okładka w 3 wariantach</li>
+        <li><strong>Krok 4 — Content kit social media:</strong> Gotowe posty (tekst + hashtagi), klipy wideo (15/30/60s), stories, Reels</li>
+        <li><strong>Krok 5 — Strategia release:</strong> AI sugeruje dzień/godzinę publikacji, kolejność platform, plan promocji na 7 dni</li>
+        <li><strong>Krok 6 — Analityka post-release:</strong> Zbieranie danych po publikacji, raport co zadziałało, sugestie na przyszłość</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🧩</span>
+      <span class="problem-title">Problem #4: Który model AI wybrać do generowania metadanych?</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — Claude API (Anthropic)</span>
+      <p><strong>Koszt:</strong> ~$3/mln tokenów wejściowych (Sonnet). Najlepszy w zrozumieniu kontekstu muzycznego i generowaniu kreatywnych tekstów po polsku. Bardzo dobre trzymanie się instrukcji.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — OpenAI GPT-4o</span>
+      <p><strong>Koszt:</strong> ~$2.50/mln tokenów. Dobry w generowaniu SEO, więcej tutoriali online. Silny w tworzeniu hashtagów i krótkich treści marketingowych.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — lokalny model (Llama 3 / Mistral)</span>
+      <p><strong>Koszt:</strong> $0 (po pobraniu). Wymaga karty graficznej 8GB+ VRAM. Pełna prywatność, brak limitów API, ale niższa jakość outputu i trudniejsza konfiguracja.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Bezpłatne korzystanie z komercyjnych API przez reverse proxy</strong></p>
+      <p>Istnieją publiczne reverse proxy do API OpenAI/Claude (np. projekty open-source na GitHub). Daje darmowy dostęp do modeli premium, ale: niestabilne, nielegalne (kradzież compute), ryzyko wycieku danych wejściowych.</p>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🧩</span>
+      <span class="problem-title">Problem #5: Jak generować okładki albumów?</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — DALL-E 3 / GPT Image</span>
+      <p>API od OpenAI. ~$0.04-0.08 za obraz. Łatwa integracja, dobre wyniki, nie wymaga własnej infrastruktury.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — Stable Diffusion (lokalnie)</span>
+      <p>Darmowe, uruchamiane na własnym GPU (min. 6GB VRAM). Pełna kontrola nad stylami. Modele fine-tunowane na okładki muzyczne dostępne na Civitai/HuggingFace.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — Canva API + szablony</span>
+      <p>Canva ma API do generowania grafik z szablonów. Mniej kreatywne, ale przewidywalne i profesjonalne. Koszt: $12/mies. (Canva Pro).</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Scraping cudzych okładek + AI style transfer</strong></p>
+      <p>Pobranie okładek z podobnych gatunków → przepuszczenie przez model style transfer → "inspirowana" okładka. Technicznie to derivative work, które może naruszać prawa autorskie oryginału.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 06 — OBEJŚCIA OGRANICZEŃ ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2>Moduł: Strategia obejścia ograniczeń</h2>
+  </div>
+
+  <div class="mod-card c-amber">
+    <div class="mod-title">⚡ Constraint Bypass Strategy</div>
+    <div class="mod-subtitle">Cel: dla każdego "muru" znaleźć drzwi, okno, i dynamit</div>
+    <p>Ten dokument zbiera WSZYSTKIE blokady zidentyfikowane w raporcie i dla każdej daje pełne spektrum rozwiązań. To kluczowy dokument decyzyjny — pomaga wybrać ścieżkę dla każdego problemu.</p>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🔐</span>
+      <span class="problem-title">Problem #6: YouTube wymaga audytu Google do publicznych uploadów</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — przejście audytu</span>
+      <p>Złożenie aplikacji do Google API compliance review. Przygotowanie: privacy policy, wyjaśnienie use-case, demo aplikacji. Czas: 2-6 tygodni.</p>
+      <ul class="steps">
+        <li>Stworzenie strony internetowej projektu (landing page)</li>
+        <li>Napisanie Privacy Policy i Terms of Service</li>
+        <li>Nagranie demo wideo pokazującego jak aplikacja działa</li>
+        <li>Wypełnienie formularza w Google Cloud Console</li>
+        <li>Odpowiadanie na pytania reviewerów (w j. angielskim)</li>
+      </ul>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — YouTube Studio jako fallback</span>
+      <p>Artysta uploaduje ręcznie przez YouTube Studio, ale AI przygotowuje: tytuł, opis, tagi, miniaturkę, ustawienia publikacji. Agent kopiuje to do schowka / generuje plik konfiguracyjny.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — Unlisted → Public workflow</span>
+      <p>Uploaduj jako "unlisted" (niepubliczny) przez API (nie wymaga audytu) → artysta ręcznie zmienia na "public" jednym klikiem w YouTube Studio.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Selenium z zalogowaną sesją YouTube</strong></p>
+      <p>Przechwycenie cookies sesji artysty → Selenium wchodzi na studio.youtube.com → emuluje upload ręczny.</p>
+      <ul class="steps">
+        <li>Export cookies z przeglądarki (extension "EditThisCookie")</li>
+        <li>Selenium / Playwright ładuje cookies</li>
+        <li>Emulacja kroków uploadu: wybierz plik → tytuł → opis → publikuj</li>
+        <li>⚠️ Google aktywnie wykrywa automatyzację — CAPTCHA, weryfikacja</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">⏱️</span>
+      <span class="problem-title">Problem #7: Rate-limiting i quotas na wszystkich platformach</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — kolejkowanie inteligentne</span>
+      <p><strong>System kolejki z respektowaniem limitów</strong></p>
+      <p>Celery + Redis zarządza uploadami. Każda platforma ma skonfigurowany limit requestów. System automatycznie rozłożone uploady w czasie.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — multi-konto (pule API keys)</span>
+      <p>Rejestracja wielu projektów Google Cloud / kont deweloperskich. Rotacja kluczy API zwiększa łączny limit. Legalne, ale wymaga zarządzania wieloma kontami.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — priorytetyzacja platform</span>
+      <p>Nie uploaduj na wszystkie platformy jednocześnie. Kolejność: SoundCloud (natychmiast) → YouTube (w ciągu godziny) → Internet Archive (następnego dnia). Rozkłada obciążenie naturalnie.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Masowa rotacja proxy + kluczy API</strong></p>
+      <p>Kupno setek kluczy API (farma kont Google) + proxy residencjalne do obejścia rate-limitów per-IP. Symulacja wielu niezależnych użytkowników.</p>
+      <ul class="steps">
+        <li>Automatyczna rejestracja kont Google (reCAPTCHA solver)</li>
+        <li>Proxy residencjalne (Bright Data / SmartProxy, ~$15/GB)</li>
+        <li>Rotacja klucza API co N requestów</li>
+        <li>⚠️ Łamie ToS Google, fraud detection wykrywa farmy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-header">
+      <span class="problem-icon">🪪</span>
+      <span class="problem-title">Problem #8: Weryfikacja tożsamości artysty na platformach</span>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-a">Rozwiązanie A — instrukcja krok-po-kroku</span>
+      <p>AI generuje checklist weryfikacji dla każdej platformy: jakie dane podać, jakie zdjęcia przygotować, jak wypełnić formularz. Artysta robi to sam, ale z "asysentem".</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-b">Rozwiązanie B — weryfikacja przez dystrybutora</span>
+      <p>DistroKid automatycznie weryfikuje artystę na Spotify for Artists i Apple Music. Używając dystrybutora, omijasz ręczną weryfikację.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-c">Rozwiązanie C — agent concierge</span>
+      <p>AI prowadzi artystę przez weryfikację w trybie konwersacji: "teraz otwórz tę stronę, kliknij tu, wpisz to". Jak osobisty asystent, ale nie robi tego za niego.</p>
+    </div>
+    <div class="solution">
+      <span class="sol-label sol-x">☠️ Rozwiązanie ostateczne</span>
+      <p><strong>Automatyczna weryfikacja z danymi artysty</strong></p>
+      <p>Artysta podaje pełne dane (dowód, zdjęcie, adres) → bot wypełnia formularze weryfikacji automatycznie.</p>
+      <ul class="steps">
+        <li>OCR na dowodzie osobistym (Tesseract / Google Vision)</li>
+        <li>Auto-fill formularzy Selenium</li>
+        <li>⚠️ Przechowywanie skanów dowodów = ekstremalnie wrażliwe dane (RODO art. 9)</li>
+        <li>⚠️ Odpowiedzialność prawna za wyciek danych osobowych</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 07 — HARMONOGRAM ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2>Moduł: Harmonogram i MVP</h2>
+  </div>
+
+  <div class="mod-card c-green">
+    <div class="mod-title">📅 Roadmap — od dokumentacji do działającego produktu</div>
+    <div class="mod-subtitle">Harmonogram oparty na pracy hobbystycznej (10-15h/tydzień)</div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-phase">Tyg. 1-2</span>
+      <div class="tl-content">
+        <strong>📄 Faza 0: Dokumentacja</strong>
+        <p>Stworzenie wszystkich dokumentów z tego planu. Efekt: kompletna dokumentacja projektu, gotowa do wdrożenia.</p>
+        <div class="tl-time">Dokumenty: 8 | Sesje z AI: ~6-8</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Tyg. 3-4</span>
+      <div class="tl-content">
+        <strong>🧠 Faza 1: AI Metadata Generator</strong>
+        <p>Silnik AI: analiza audio (librosa) + generowanie metadanych (LLM). Efekt: wrzucasz plik .mp3 → dostajesz tytuł, opis, tagi, sugestię okładki.</p>
+        <ul>
+          <li>Setup środowiska Python + FastAPI</li>
+          <li>Integracja z Claude/OpenAI API</li>
+          <li>Prompty do generowania metadanych</li>
+          <li>Prosty CLI (command line interface)</li>
+        </ul>
+        <div class="tl-time">Kamień milowy: działający generator metadanych</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Tyg. 5-8</span>
+      <div class="tl-content">
+        <strong>⬆️ Faza 2: Auto-upload na 3 platformy</strong>
+        <p>Integracja z YouTube API, SoundCloud API, Internet Archive. Efekt: jeden klik → upload na 3 platformy z AI-generowanymi metadanymi.</p>
+        <ul>
+          <li>OAuth flow dla YouTube i SoundCloud</li>
+          <li>Moduły uploadu (klasy Python)</li>
+          <li>Obsługa błędów, retry, logging</li>
+          <li>Prosty web dashboard (React)</li>
+        </ul>
+        <div class="tl-time">Kamień milowy: pierwszy prawdziwy upload "z kodu"</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Tyg. 9-12</span>
+      <div class="tl-content">
+        <strong>📱 Faza 3: Social Media Content Kit</strong>
+        <p>AI generuje pakiety promocyjne: grafiki, klipy, posty. Integracja z Buffer/Hootsuite do schedulowania.</p>
+        <ul>
+          <li>Generator grafik (DALL-E / Canva API)</li>
+          <li>Generator klipów wideo (FFmpeg + szablony)</li>
+          <li>Integracja z Buffer API</li>
+          <li>Panel "content calendar"</li>
+        </ul>
+        <div class="tl-time">Kamień milowy: pełny content kit generowany automatycznie</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Tyg. 13-16</span>
+      <div class="tl-content">
+        <strong>🤝 Faza 4: Integracja z dystrybutorem + rozszerzenia</strong>
+        <p>Partnerstwo z dystrybutorem, rozszerzenie o nowe platformy, analityka.</p>
+        <ul>
+          <li>Negocjacje partnerskie z DistroKid / Amuse</li>
+          <li>Chrome Extension do Bandcamp</li>
+          <li>Panel analityczny (dane z API platform)</li>
+          <li>Testy z prawdziwymi artystami (beta)</li>
+        </ul>
+        <div class="tl-time">Kamień milowy: produkt gotowy do beta testów</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <strong>Realistyczne tempo:</strong> Przy nauce od zera i 10-15h/tyg., fazy mogą się rozciągnąć 1.5-2x. To normalne. Kluczowe: po każdej fazie masz coś DZIAŁAJĄCEGO — nie czekasz 16 tygodni na pierwszy efekt.
+  </div>
+</div>
+
+<!-- ═══════════════ 08 — BIZNES ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2>Moduł: Model biznesowy</h2>
+  </div>
+
+  <div class="mod-card c-cyan">
+    <div class="mod-title">💰 Business Model</div>
+    <div class="mod-subtitle">Cel: jak na tym zarobić (lub przynajmniej pokryć koszty)</div>
+    <p>Dokument opisze modele monetyzacji, wyliczenie kosztów operacyjnych, i punkt break-even (kiedy przestajesz dokładać).</p>
+    <div class="mod-contents">
+      <strong style="font-size:.82rem">Co dokument będzie zawierał:</strong>
+      <ul>
+        <li><strong>Model freemium:</strong> darmowy tier (1 release/mies.) + płatny ($5-15/mies.)</li>
+        <li><strong>Model pay-per-release:</strong> $2-5 za każde wydanie (jednorazowo)</li>
+        <li><strong>Koszty stałe:</strong> hosting (~$20/mies.), API AI (~$30/mies. przy 100 użytkownikach), domena ($12/rok)</li>
+        <li><strong>Break-even:</strong> szacunkowo 30-50 płacących użytkowników</li>
+        <li><strong>Kanały pozyskania:</strong> Reddit (r/WeAreTheMusicMakers), Discord muzyczne, TikTok o produkcji</li>
+        <li><strong>Ryzyka:</strong> churn (odejście użytkowników), zmiana API platform, konkurencja</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 09 — KOLEJNE KROKI ═══════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2>Następne kroki — co robimy teraz</h2>
+  </div>
+
+  <p>Mamy gotowy plan. Teraz tworzymy dokumenty jeden po drugim. Proponowana kolejność pracy:</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-phase">Sesja 2</span>
+      <div class="tl-content">
+        <strong>Product Vision & Scope</strong>
+        <p>Zapytam Cię o szczegóły (persona artysty, budżet, cele) → wspólnie napiszemy "konstytucję" projektu.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Sesja 3</span>
+      <div class="tl-content">
+        <strong>Architektura techniczna + diagramy</strong>
+        <p>Narysuję diagramy systemu, flow danych, schemat bazy danych. Wytłumaczę każdy element.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Sesja 4</span>
+      <div class="tl-content">
+        <strong>Mapa integracji platform (pełna dokumentacja API)</strong>
+        <p>Gotowe snippety kodu Python dla YouTube, SoundCloud, Internet Archive + obejścia dla reszty.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Sesja 5</span>
+      <div class="tl-content">
+        <strong>AI Pipeline — prompty i modele</strong>
+        <p>Gotowe prompty do kopiowania, konfiguracja modeli, pipeline przetwarzania audio.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <span class="tl-phase">Sesja 6-7</span>
+      <div class="tl-content">
+        <strong>Pozostałe dokumenty (prawo, biznes, szczegółowy harmonogram)</strong>
+        <p>Dopełnienie dokumentacji + finalizacja planu wdrożenia.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Twój ruch:</strong> Przejrzyj ten plan i powiedz:<br>
+    • Czy kolejność modułów Ci odpowiada?<br>
+    • Czy coś chcesz dodać / usunąć / zmienić priorytet?<br>
+    • Czy jesteś gotów do Sesji 2 (Product Vision)?<br><br>
+    Mogę też od razu pogłębić dowolny z opisanych problemów (#1-#8).
+  </div>
+</div>
+
+<!-- ═══════════════ LEGENDA ═══════════════ -->
+<div class="legend">
+  <h3>📖 Legenda pojęć</h3>
+  <div class="legend-grid">
+    <div class="legend-item"><strong>API</strong> — Application Programming Interface — interfejs do komunikacji między programami</div>
+    <div class="legend-item"><strong>OAuth</strong> — standard autoryzacji pozwalający aplikacji działać w imieniu użytkownika</div>
+    <div class="legend-item"><strong>Endpoint</strong> — konkretny adres URL, pod który wysyłasz dane do API</div>
+    <div class="legend-item"><strong>Rate-limiting</strong> — ograniczenie liczby zapytań do API w jednostce czasu</div>
+    <div class="legend-item"><strong>Quota</strong> — limit "jednostek" API, które możesz zużyć dziennie</div>
+    <div class="legend-item"><strong>ToS</strong> — Terms of Service — regulamin platformy</div>
+    <div class="legend-item"><strong>CFAA</strong> — Computer Fraud and Abuse Act — ustawa USA o oszustwach komputerowych</div>
+    <div class="legend-item"><strong>RODO/GDPR</strong> — europejskie przepisy o ochronie danych osobowych</div>
+    <div class="legend-item"><strong>Headless browser</strong> — przeglądarka bez interfejsu graficznego, sterowana kodem</div>
+    <div class="legend-item"><strong>Playwright / Selenium</strong> — narzędzia do automatyzacji przeglądarek</div>
+    <div class="legend-item"><strong>Stealth plugin</strong> — wtyczka ukrywająca fakt, że przeglądarkę steruje bot</div>
+    <div class="legend-item"><strong>Fingerprint</strong> — "odcisk palca" przeglądarki — zestaw danych identyfikujących urządzenie</div>
+    <div class="legend-item"><strong>Proxy residencjalne</strong> — serwery pośredniczące z IP wyglądającymi jak zwykłe domowe</div>
+    <div class="legend-item"><strong>Reverse proxy API</strong> — pośrednik przekierowujący zapytania do cudzego API</div>
+    <div class="legend-item"><strong>Celery</strong> — Python: system kolejkowania zadań asynchronicznych (w tle)</div>
+    <div class="legend-item"><strong>Redis</strong> — szybka baza danych w pamięci, używana jako broker kolejek</div>
+    <div class="legend-item"><strong>FastAPI</strong> — nowoczesny framework Python do budowania API webowych</div>
+    <div class="legend-item"><strong>React</strong> — biblioteka JavaScript do budowania interfejsów użytkownika</div>
+    <div class="legend-item"><strong>Tailwind</strong> — framework CSS do szybkiego stylowania stron</div>
+    <div class="legend-item"><strong>LLM</strong> — Large Language Model — duży model językowy (np. Claude, GPT)</div>
+    <div class="legend-item"><strong>BPM</strong> — Beats Per Minute — tempo utworu muzycznego</div>
+    <div class="legend-item"><strong>Librosa</strong> — biblioteka Python do analizy audio</div>
+    <div class="legend-item"><strong>FFmpeg</strong> — narzędzie do obróbki wideo/audio z linii komend</div>
+    <div class="legend-item"><strong>CLI</strong> — Command Line Interface — interfejs tekstowy (terminal)</div>
+    <div class="legend-item"><strong>Freemium</strong> — model: podstawa za darmo, zaawansowane funkcje płatne</div>
+    <div class="legend-item"><strong>Break-even</strong> — punkt, w którym przychody = koszty (zero zysku, zero straty)</div>
+    <div class="legend-item"><strong>Churn</strong> — wskaźnik odejścia użytkowników z usługi</div>
+    <div class="legend-item"><strong>Unit economics</strong> — kalkulacja zysku/kosztu na jednego użytkownika</div>
+    <div class="legend-item"><strong>SEO</strong> — Search Engine Optimization — optymalizacja pod wyszukiwarki</div>
+    <div class="legend-item"><strong>Multipart upload</strong> — sposób wysyłania plików przez HTTP (dzielenie na części)</div>
+    <div class="legend-item"><strong>AES-256</strong> — algorytm szyfrowania (standard wojskowy)</div>
+    <div class="legend-item"><strong>OCR</strong> — Optical Character Recognition — rozpoznawanie tekstu ze zdjęć</div>
+    <div class="legend-item"><strong>Appium / ADB</strong> — narzędzia do automatyzacji aplikacji mobilnych</div>
+    <div class="legend-item"><strong>Frida</strong> — framework do dynamicznej analizy i modyfikacji aplikacji</div>
+    <div class="legend-item"><strong>Dublin Core</strong> — standard metadanych dla zasobów cyfrowych</div>
+    <div class="legend-item"><strong>Mermaid</strong> — narzędzie do rysowania diagramów w kodzie tekstowym</div>
+  </div>
+</div>
+
+<div class="footer">
+  Plan dokumentacji v1.0 · wygenerowany 6 kwietnia 2026 · Projekt: AI Music Distribution Agent · Plik pamięci: menory.md
+</div>
+
+</div>
+</body>
+</html>
